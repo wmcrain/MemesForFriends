@@ -2,8 +2,12 @@ package com.dhrw.sitwithus;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.dhrw.sitwithus.server.ServerRequest;
+import com.dhrw.sitwithus.server.ServerResponse;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -12,6 +16,22 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // An example of how the request cane be called
+        ServerRequest.createLoginRequest("JoeSmith", "12345678")
+                .sendRequest(new ServerRequest.Callback() {
+                    @Override
+                    public void onError(ServerResponse response) {
+                        Log.e("TEST", "Error: " + response.responseCode + " "
+                                + response.responseMessage);
+                    }
+
+                    @Override
+                    public void onSuccess(ServerResponse response) {
+                        Log.d("TEST", "Success: " +response.responseCode + " "
+                                + response.responseMessage);
+                    }
+                }, 5000);
     }
 
     @Override
