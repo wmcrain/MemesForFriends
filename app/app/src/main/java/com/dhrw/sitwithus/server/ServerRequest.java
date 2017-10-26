@@ -27,12 +27,14 @@ public class ServerRequest {
     // Text added to strings before the strings are hashed to increase the difficulty of
     private static final String SALT = "5H3$2Mop0Z7q+^490aa&%&1";
 
-    //
-    private static final String DIR_LOGIN = "login";
+    // THe list of directories for the api calls
+    private static final String DIR_CREATE_USER = "create";
+    private static final String DIR_LOGIN_USER = "login";
 
     // The list of request JSON keys
-    private static final String KEY_USERNAME = "username";
     private static final String KEY_PASSWORD = "password";
+    private static final String KEY_SUCCESS = "success";
+    private static final String KEY_USERNAME = "username";
 
     /** Holds the methods that will be called when the response has arrived from the server. */
     public interface Callback {
@@ -53,7 +55,7 @@ public class ServerRequest {
     // The data to represented as JSON text to be sent to the server
     private final String requestMessage;
 
-    //
+    // The directory of the website the request should be sent to
     private final String directory;
 
     /** Create a new {@link ServerRequest} which holds the request data to be send to the server. */
@@ -110,7 +112,8 @@ public class ServerRequest {
 
                     // Call the correct callback depending if the response code represents a
                     // successful response or not.
-                    if (successful) {
+                    JSONObject responseData = new JSONObject(response.toString());
+                    if (successful && responseData.getInt(KEY_SUCCESS) == 1) {
                         callback.onSuccess(new ServerResponse(responseCode, response.toString()));
                     } else {
                         callback.onError(new ServerResponse(responseCode, response.toString()));
@@ -120,7 +123,11 @@ public class ServerRequest {
                     callback.onError(new ServerResponse(ServerResponse.RESPONSE_IO_EXCEPTION,
                             e.toString()));
 
+                } catch (JSONException e) {
+                    callback.onError(new ServerResponse(ServerResponse.RESPONSE_JSON_EXCEPTION,
+                            e.toString()));
                 }
+
                 return null;
             }
         };
@@ -152,13 +159,12 @@ public class ServerRequest {
      * @param userName The username of the account of the user attempting to log in
      * @param password The password of the account of the user attempting to log in
      */
-    public static ServerRequest createLoginRequest(String userName, String password)
-            throws IllegalArgumentException {
+    public static ServerRequest createLoginRequest(String userName, String password) {
         try {
             JSONObject loginData = new JSONObject();
             loginData.put(KEY_USERNAME, userName);
             loginData.put(KEY_PASSWORD, hash(password));
-            return new ServerRequest(DIR_LOGIN, loginData);
+            return new ServerRequest(DIR_LOGIN_USER, loginData);
         } catch (JSONException e) {
             throw new IllegalArgumentException("Unable to create login request.");
         }
