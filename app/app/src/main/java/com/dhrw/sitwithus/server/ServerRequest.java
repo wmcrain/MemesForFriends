@@ -27,6 +27,9 @@ public class ServerRequest {
     // Text added to strings before the strings are hashed to increase the difficulty of
     private static final String SALT = "5H3$2Mop0Z7q+^490aa&%&1";
 
+    //
+    private static final String DIR_LOGIN = "login";
+
     // The list of request JSON keys
     private static final String KEY_USERNAME = "username";
     private static final String KEY_PASSWORD = "password";
@@ -50,8 +53,12 @@ public class ServerRequest {
     // The data to represented as JSON text to be sent to the server
     private final String requestMessage;
 
+    //
+    private final String directory;
+
     /** Create a new {@link ServerRequest} which holds the request data to be send to the server. */
-    private ServerRequest(JSONObject requestData) {
+    private ServerRequest(String directory, JSONObject requestData) {
+        this.directory = directory;
         this.requestMessage = requestData.toString();
     }
 
@@ -151,7 +158,7 @@ public class ServerRequest {
             JSONObject loginData = new JSONObject();
             loginData.put(KEY_USERNAME, userName);
             loginData.put(KEY_PASSWORD, hash(password));
-            return new ServerRequest(loginData);
+            return new ServerRequest(DIR_LOGIN, loginData);
         } catch (JSONException e) {
             throw new IllegalArgumentException("Unable to create login request.");
         }
