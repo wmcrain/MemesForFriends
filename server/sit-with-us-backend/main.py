@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 
 import json
-import webapp2
-import urllib
 import keys
+import urllib
+import webapp2
 
 from models import User
 
+from google.appengine.api import app_identity
+from google.appengine.api import mail
 from google.appengine.ext import ndb
 from webapp2_extras import json as JSON
 
@@ -48,23 +50,29 @@ class MainHandler(ApiHandler):
 class CreateUserHandler(ApiHandler):
     def handle(self):
         self.response.set_status(200)
-        self.response.write(json.dumps(User.create(
-            self.getParam(keys.USERNAME), 
-            self.getParam(keys.PASSWORD), 
-            self.getParam(keys.EMAIL), 
-            self.getParam(keys.PHONE_NUMBER))))
+        self.response.write(json.dumps(
+            User.handle_create(
+                self.getParam(keys.USERNAME), 
+                self.getParam(keys.PASSWORD), 
+                self.getParam(keys.EMAIL), 
+                self.getParam(keys.PHONE_NUMBER))))
+
+class CreateConfirmUserHandler(webapp2.RequestHandler):
+    def get(self):
+        self.response.set_status(200)
+        self.response.write(User.handle_verify(self.request.get(keys.USER_KEY)))
 
 
 class LoginUserHandler(ApiHandler):
     def handle(self):
         self.response.set_status(200)
-        self.response.write(json.dumps(User.login(
+        self.response.write(json.dumps(User.handle_login(
             self.getParam(keys.USERNAME), 
             self.getParam(keys.PASSWORD))))
-
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/create', CreateUserHandler),
+    ('/createconfirm', CreateConfirmUserHandler),
     ('/login', LoginUserHandler)
 ], debug=True)
