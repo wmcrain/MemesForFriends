@@ -1,6 +1,9 @@
 package com.dhrw.sitwithus.server;
 
 import android.os.AsyncTask;
+import android.util.Log;
+
+import com.dhrw.sitwithus.util.Keys;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,26 +33,24 @@ public class ServerRequest {
     // THe list of directories for the api calls
     private static final String DIR_CREATE_USER = "create";
     private static final String DIR_LOGIN_USER = "login";
-
-    // The list of request JSON keys
-    private static final String KEY_PASSWORD = "password";
-    private static final String KEY_SUCCESS = "success";
-    private static final String KEY_USERNAME = "username";
-
+    private static final String DIR_LOGIN_PING = "login/ping";
+    
     /** Holds the methods that will be called when the response has arrived from the server. */
-    public interface Callback {
+    public static abstract class Callback {
 
         /**
          * The callback invoked when the request times out, when an error occurs while attempting
          * to retrieve the {@link ServerResponse}, or if the HTTP response code of the
          * {@link ServerResponse} represents that the request could not be handled correctly.
-         * @param response the response from the server containing the error code and the
-         *                 response message
          */
-        void onError(ServerResponse response);
+        public void onError(int responseCode, String responseMessage) {
+            Log.e("SitWithUs", responseMessage);
+        }
 
         /** The callback invoked when the server handles the request correctly with no errors. */
-        void onSuccess(ServerResponse response);
+        public void onSuccess(int responseCode, ServerResponse responseMessage) {
+            Log.d("SitWithUs", responseMessage.toString());
+        }
     }
 
     // The data to represented as JSON text to be sent to the server
@@ -65,6 +66,11 @@ public class ServerRequest {
     }
 
     /** */
+    public void sendRequest(final Callback callback) {
+        sendRequest(callback, 5000);
+    }
+
+    /** */
     public void sendRequest(final Callback callback, final int timeOut) {
         AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
 
@@ -72,8 +78,8 @@ public class ServerRequest {
             protected Void doInBackground(Void... params) {
                 try {
                     // Create the connection to the server url
-                    HttpURLConnection con = (HttpURLConnection) new URL(SERVER_WEB_ADDRESS)
-                            .openConnection();
+                    HttpURLConnection con = (HttpURLConnection) new URL(SERVER_WEB_ADDRESS
+                            + '/' + directory).openConnection();
                     con.setConnectTimeout(timeOut);
                     con.setReadTimeout(timeOut);
 
@@ -112,20 +118,14 @@ public class ServerRequest {
 
                     // Call the correct callback depending if the response code represents a
                     // successful response or not.
-                    JSONObject responseData = new JSONObject(response.toString());
-                    if (successful && responseData.getInt(KEY_SUCCESS) == 1) {
-                        callback.onSuccess(new ServerResponse(responseCode, response.toString()));
+                    if (successful) {
+                        callback.onSuccess(responseCode, new ServerResponse(response.toString()));
                     } else {
-                        callback.onError(new ServerResponse(responseCode, response.toString()));
+                        callback.onError(responseCode, response.toString());
                     }
 
                 } catch (IOException e) {
-                    callback.onError(new ServerResponse(ServerResponse.RESPONSE_IO_EXCEPTION,
-                            e.toString()));
-
-                } catch (JSONException e) {
-                    callback.onError(new ServerResponse(ServerResponse.RESPONSE_JSON_EXCEPTION,
-                            e.toString()));
+                    callback.onError(-1, e.toString());
                 }
 
                 return null;
@@ -154,19 +154,79 @@ public class ServerRequest {
     }
 
     /**
-     * Create a request that can be sent to the server that attempts to log a user in with the
-     * specified username and password.
-     * @param userName The username of the account of the user attempting to log in
-     * @param password The password of the account of the user attempting to log in
+     * Creates a request for an account with the specified credentials to be created.
+     *
+     * If account creation is successful, the form of the resulting JSON will be:
+     *      { {@link #} : 1, {@link Keys#DEVICE_CODE} : [device_code] }
+     *
+     * If account creation is not successful, the form of the resulting JSON will be:
+     *      { {@link Keys#SUCCESS} : 0, {@link Keys#ERROR_MESSAGE} : [error_text] }
+     *
+     * @param firstName The first name of the user
+     * @param lastName The last name of the user
+     * @param username The username of the account
+     * @param email The email used to authenticate the account
+     * @param phoneNumber The phone number tied to the account (with or without symbols)
      */
-    public static ServerRequest createLoginRequest(String userName, String password) {
+    public static ServerRequest createUserCreateRequest(String firstName, String lastName,
+            String username, String email, String phoneNumber) {
         try {
-            JSONObject loginData = new JSONObject();
-            loginData.put(KEY_USERNAME, userName);
-            loginData.put(KEY_PASSWORD, hash(password));
-            return new ServerRequest(DIR_LOGIN_USER, loginData);
+            JSONObject data = new JSONObject();
+            data.put(Keys.FIRST_NAME, firstName);
+            data.put(Keys.LAST_NAME, lastName);
+            data.put(Keys.USERNAME, username);
+            data.put(Keys.EMAIL, email);
+            data.put(Keys.PHONE_NUMBER, phoneNumber);
+            return new ServerRequest(DIR_CREATE_USER, data);
+
         } catch (JSONException e) {
             throw new IllegalArgumentException("Unable to create login request.");
+        }
+    }
+
+    /**
+     * Creates a request that can be sent to the server that attempts to log a user in with the
+     * specified username and password.
+     *
+     * Regardless of if a user with the email exists or not, the form of the resulting JSON will be:
+     *      { {@link Keys#SUCCESS} : 1, {@link Keys#DEVICE_CODE} : [device_code] }
+     *
+     * @param email The username of the account of the user attempting to log in
+     */
+    public static ServerRequest createLoginRequest(String email) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.EMAIL, email);
+            return new ServerRequest(DIR_LOGIN_USER, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login request.");
+        }
+    }
+
+    /**
+     * Creates a request that checks if the login verification link has been clicked on so that the
+     * user can log into their account.
+     *
+     * If the link was clicked, the form of the resulting JSON will be:
+     *      { {@link Keys#SUCCESS} : 1, {@link Keys#USER_KEY} : [user_key] }
+     *
+     * If the link was not clicked and the user is not able to login in yet, the form of the
+     * resulting JSON will be:
+     *      { {@link Keys#SUCCESS} : 0 }
+     *
+     * @param email The email address of the account to be logged into
+     * @param deviceCode The device code retrieved when the login request was submitted
+     **/
+    public static ServerRequest createLoginPingRequest(String email, String deviceCode) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.EMAIL, email);
+            data.put(Keys.DEVICE_CODE, deviceCode);
+            return new ServerRequest(DIR_LOGIN_PING, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
         }
     }
 }
