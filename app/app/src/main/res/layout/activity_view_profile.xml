@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name_age"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:text="Name, Age" />
+
+        <ImageView
+        android:id="@+id/pic"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:paddingTop="12dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/david" />
+
+        <TextView
+            android:id="@+id/bio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget metus sit amet ipsum varius faucibus in fringilla ex. Vestibulum placerat mi auctor, sollicitudin nisl eu, scelerisque nibh. Donec porttitor ac lacus sed faucibus. Suspendisse at risus quis erat condimentum tincidunt in at massa. Integer quis faucibus lorem, ut pellentesque ipsum." />
+
+    <ListView
+        android:id="@+id/interests"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </ListView>
+
+     <LinearLayout
+         android:id="@+id/requests"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal">
+
+         <Button
+             android:id="@+id/requestFriend"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Send Friend Request" />
+         <View
+             android:layout_width="0dp"
+             android:layout_weight="1"
+             android:layout_height="wrap_content"
+             />
+         <Button
+             android:id="@+id/blockUser"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Block User" />
+
+
+     </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
+
+</RelativeLayout>
