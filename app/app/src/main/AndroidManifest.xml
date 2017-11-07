@@ -24,6 +24,9 @@
         <activity android:name=".UserCreateActivity" >
         </activity>
 
+        <activity android:name=".ViewProfileActivity">
+        </activity>
+
     </application>
 
 </manifest>
