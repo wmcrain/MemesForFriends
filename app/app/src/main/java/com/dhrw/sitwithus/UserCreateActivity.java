@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dhrw.sitwithus.server.ServerRequest;
 import com.dhrw.sitwithus.server.ServerResponse;
@@ -48,14 +49,23 @@ public class UserCreateActivity extends Activity {
                     public void onSuccess(int responseCode, ServerResponse responseMessage) {
                         Log.d("SitWithUs", responseMessage.toString());
 
-                        // Send the email address and the device code retrieved from creating the
-                        // account back to the login activity
-                        Intent data = new Intent();
-                        data.putExtra(Keys.EMAIL, email);
-                        data.putExtra(Keys.DEVICE_CODE, responseMessage.getString(Keys.DEVICE_CODE));
+                        if (responseMessage.getInt(Keys.SUCCESS) == 1) {
 
-                        setResult(RESULT_OK, data);
-                        UserCreateActivity.this.finish();
+                            // Send the email address and the device code retrieved from creating the
+                            // account back to the login activity
+                            Intent data = new Intent();
+                            data.putExtra(Keys.EMAIL, email);
+                            data.putExtra(Keys.DEVICE_CODE, responseMessage.getString(Keys.DEVICE_CODE));
+
+                            setResult(RESULT_OK, data);
+                            UserCreateActivity.this.finish();
+
+                        } else {
+
+                            /*Toast.makeText(UserCreateActivity.this,
+                                    responseMessage.getString(Keys.ERROR_MESSAGE),
+                                    Toast.LENGTH_LONG).show();*/
+                        }
                     }
                 });
             }

@@ -22,6 +22,10 @@ class Keys():
     USERNAME = "username"
     USER_KEY = "user_key"
     LINK_PARAM = "p"
+    FIRST_NAME = "first_name"
+    LAST_NAME = "last_name"
+    BIO = "bio"
+    PICTURE = "picture"
 
 
 class Links():
@@ -64,6 +68,9 @@ class ApiHandler(webapp2.RequestHandler):
             return self.request.json[param]
         
         raise MissingParameter('Parameter \"' + param + '\" not provided')
+
+    def hasParam(self, param):
+        return param in self.request.json
 
 
 # The environment for making templated html

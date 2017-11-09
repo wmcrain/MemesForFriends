@@ -26,6 +26,8 @@ class CreateUserHandler(ApiHandler):
         username = self.getParam(Keys.USERNAME)
         email = self.getParam(Keys.EMAIL)
         phone = self.getParam(Keys.PHONE_NUMBER)
+        first_name = self.getParam(Keys.FIRST_NAME)
+        last_name = self.getParam(Keys.LAST_NAME)
 
         # Check if the username or email has been taken by a verified user or a user that still is 
         # attempting to verify their email.
@@ -41,7 +43,8 @@ class CreateUserHandler(ApiHandler):
         phone = re.sub("[^0-9]", "", phone)
 
         # Create a new unverified user and put the user in the database
-        user = User(username=username, email=email, phone=phone, verified=False)
+        user = User(username=username, email=email, phone=phone, verified=False, 
+            first_name=first_name, last_name=last_name)
         user.put()
 
         # 
@@ -68,8 +71,10 @@ class CreateVerifyUserHandler(webapp2.RequestHandler):
         template_params = { 'message' : '', 'username' : ''}
 
         # Retrieve the link model associated with this link
-        links = VerficationLink.query(VerficationLink.param == self.request.get(Keys.LINK_PARAM)
-            and VerficationLink.op == Links.LINK_CREATE).fetch()
+        links = VerficationLink.query(ndb.AND(
+            VerficationLink.param == self.request.get(Keys.LINK_PARAM),
+            VerficationLink.op == Links.LINK_CREATE)).fetch()
+
         if len(links) == 0:
             template_params['message'] = 'This link is invalid.'
 
@@ -90,7 +95,7 @@ class CreateVerifyUserHandler(webapp2.RequestHandler):
                     template_params['message'] = 'This account has been successfully verified.'
 
                     #
-                    links[0].used()
+                    links[0].used = True
                     links[0].put()
 
                     #else:
@@ -169,8 +174,8 @@ class LoginPingHandler(ApiHandler):
             return { Keys.SUCCESS : 0 }
 
         # Find the link that will verify the log in
-        links = [x for x in (VerficationLink.query(VerficationLink.user_key == users[0].key
-            and VerficationLink.device_code == device_code).fetch())]
+        links = [x for x in VerficationLink.query(ndb.AND(VerficationLink.user_key == users[0].key,
+            VerficationLink.device_code == device_code)).fetch()]
 
         # If no link exists, then someone is sending formatted requests outside the app 
         if len(links) == 0:

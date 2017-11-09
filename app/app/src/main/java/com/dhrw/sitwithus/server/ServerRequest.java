@@ -1,14 +1,18 @@
 package com.dhrw.sitwithus.server;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.dhrw.sitwithus.util.Keys;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,6 +21,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 /** */
 public class ServerRequest {
@@ -25,7 +31,7 @@ public class ServerRequest {
     private static final String SERVER_WEB_ADDRESS = "http://sit-with-us-backend.appspot.com";
 
     // The byte representation of characters sent to and received from the server
-    private static final String CHARSET = "UTF-8";
+    static final String CHARSET = "UTF-8";
 
     // Text added to strings before the strings are hashed to increase the difficulty of
     private static final String SALT = "5H3$2Mop0Z7q+^490aa&%&1";
@@ -34,6 +40,8 @@ public class ServerRequest {
     private static final String DIR_CREATE_USER = "create";
     private static final String DIR_LOGIN_USER = "login";
     private static final String DIR_LOGIN_PING = "login/ping";
+    private static final String DIR_PROFILE_GET = "profile/get";
+    private static final String DIR_PROFILE_SET = "profile/set";
     
     /** Holds the methods that will be called when the response has arrived from the server. */
     public static abstract class Callback {
@@ -133,6 +141,7 @@ public class ServerRequest {
         };
 
         asyncTask.execute();
+
     }
 
     /** Salt and hash the specified text using the SHA-256 hashing algorithm. */
@@ -227,6 +236,58 @@ public class ServerRequest {
 
         } catch (JSONException e) {
             throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
+    public static ServerRequest createUpdateProfileRequest(String userKey, @Nullable String bio,
+            @Nullable Bitmap picture) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
+
+            // Add the new user bio if it was provided
+            if (bio != null) {
+                data.put(Keys.BIO, bio);
+            }
+
+            // Add the new profile picture if it was provided
+            if (picture != null) {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+                // Put the UTF-8 string representation of the bytes of the file in the request data
+                String pictureBytes = new String(stream.toByteArray(), CHARSET);
+                data.put(Keys.PICTURE, pictureBytes);
+            }
+
+            return new ServerRequest(DIR_PROFILE_SET, data);
+
+        } catch (JSONException|UnsupportedEncodingException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
+    public static ServerRequest createGetProfileRequest(String userKey, String username) {
+        ArrayList<String> usernames = new ArrayList<>();
+        usernames.add(username);
+        return createGetProfileRequest(userKey, usernames);
+    }
+
+    public static ServerRequest createGetProfileRequest(String userKey, List<String> usernames) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
+
+            JSONArray targetArray = new JSONArray();
+            for (int i = 0; i < usernames.size(); i++) {
+                targetArray.put(i, usernames.get(i));
+            }
+            data.put(Keys.USERNAME, targetArray);
+
+            return new ServerRequest(DIR_PROFILE_GET, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create get profile request.");
         }
     }
 }

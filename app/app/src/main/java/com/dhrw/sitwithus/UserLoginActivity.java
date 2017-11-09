@@ -34,14 +34,6 @@ public class UserLoginActivity extends Activity {
         private final ServerRequest.Callback requestCallback = new ServerRequest.Callback() {
 
             @Override
-            public void onError(int responseCode, String responseMessage) {
-                super.onError(responseCode, responseMessage);
-
-                // End the thread if something goes wrong with communicating with the server
-                stop = true;
-            }
-
-            @Override
             public void onSuccess(int responseCode, ServerResponse responseMessage) {
                 Log.d("SitWithUs", "Receive " + responseMessage.toString());
                 if (responseMessage.getInt(Keys.SUCCESS) == 1) {

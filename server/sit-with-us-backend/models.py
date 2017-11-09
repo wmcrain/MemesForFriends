@@ -19,6 +19,9 @@ class User(ndb.Model):
     first_name = ndb.StringProperty(indexed=False)
     last_name = ndb.StringProperty(indexed=False)
 
+    bio = ndb.StringProperty(indexed=False)
+    picture = ndb.BlobProperty(indexed=False)
+
     # Whether the user has verified their email or not
     verified = ndb.BooleanProperty(required=True, indexed=False)
 
@@ -36,8 +39,8 @@ class User(ndb.Model):
         """
 
         # 
-        links = VerficationLink.query(VerficationLink.user_key == self.key
-            and VerficationLink.op == Links.LINK_CREATE).fetch()
+        links = VerficationLink.query(ndb.AND(VerficationLink.user_key == self.key,
+            VerficationLink.op == Links.LINK_CREATE)).fetch()
 
         if len(links) != 0:
             raise Exception('Account create link already created for this user.')
@@ -65,9 +68,10 @@ class User(ndb.Model):
 
 
     def expired(self):
-        return len(VerficationLink.query(VerficationLink.user_key == self.key
-                and VerficationLink.op == Links.LINK_CREATE
-                and VerficationLink.expiration_time < datetime.datetime.now()).fetch()) == 0
+        return len(ndb.AND(ndb.AND(
+                VerficationLink.query(VerficationLink.user_key == self.key,
+                VerficationLink.op == Links.LINK_CREATE),
+                VerficationLink.expiration_time < datetime.datetime.now()).fetch())) == 0
 
 
 # The ranges for the salt and device code
