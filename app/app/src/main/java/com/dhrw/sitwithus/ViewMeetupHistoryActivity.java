@@ -7,6 +7,6 @@ public class ViewMeetupHistoryActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meetuphistory.xml);
+        setContentView(R.layout.activity_meetuphistory);
     }
 }

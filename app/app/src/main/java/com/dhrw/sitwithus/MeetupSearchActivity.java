@@ -11,7 +11,7 @@ public class MeetupSearchActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.meetup_search.xml);
+        setContentView(R.layout.activity_meetup_search);
 
         ImageButton backbutton = (ImageButton) findViewById(R.id.backbuttonSearch);
         backbutton.setOnClickListener(new View.OnClickListener() {

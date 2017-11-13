@@ -8,7 +8,7 @@ public class UserContactDevs extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_devs.xml);
+        setContentView(R.layout.activity_contact_devs);
     }
 
 }

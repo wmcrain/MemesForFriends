@@ -11,9 +11,9 @@ public class AccountManageActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_accountmanagement.xml);
+        setContentView(R.layout.activity_accountmanagement);
 
-        Button editProfile = findViewById(R.id.editProfileButtonManage);
+        Button editProfile = (Button) findViewById(R.id.editProfileButtonManage);
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -22,7 +22,7 @@ public class AccountManageActivity extends Activity {
             }
         });
 
-        Button meetupHistory = findViewById(R.id.meetupHistoryButtonManage);
+        Button meetupHistory = (Button) findViewById(R.id.meetupHistoryButtonManage);
         meetupHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,7 +40,7 @@ public class AccountManageActivity extends Activity {
                 startActivityForResult(myIntent, 0);
             }
         });*/
-        Button blocklist = findViewById(R.id.blocklistManage);
+        Button blocklist = (Button) findViewById(R.id.blocklistManage);
         blocklist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -10,6 +10,6 @@ public class UserLogoutActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.logout.xml);
+        setContentView(R.layout.activity_logout);
     }
 }
