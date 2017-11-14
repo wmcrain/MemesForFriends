@@ -1,13 +1,20 @@
 package com.dhrw.sitwithus;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dhrw.sitwithus.server.ServerRequest;
@@ -19,6 +26,40 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class UserLoginActivity extends Activity {
+    LoginPing lp;
+
+    public static class LoginPopup extends DialogFragment {
+        //needs code somewhere further down to create this at the proper time and pass in correct address and code
+
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+            final View rootView=inflater.inflate(R.layout.fragment_login_popup, container, false);
+            final TextView instructions = (TextView) rootView.findViewById(R.id.loginPopupText);
+            final String address = getArguments().getString("address");
+            final String code = getArguments().getString("code");
+            final boolean registered = getArguments().getBoolean("registered");
+            final String display;
+
+            if(registered){
+                display = "An email has been sent to " + address + " with device code " + code + ". To login, click the link provided.";
+            }
+            else{
+                display = "An email has been sent to " + address + " with device code " + code + ". To complete registration, click the link provided.";
+            }
+
+            instructions.setText(display);
+
+            Button cancel = (Button) rootView.findViewById(R.id.loginPopupCancel);
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((UserLoginActivity)getActivity()).cancelRequest();
+                    dismiss();
+                }
+            });
+            return rootView;
+        }
+
+    }
 
     /** */
     private class LoginPing extends Thread {
@@ -27,7 +68,7 @@ public class UserLoginActivity extends Activity {
         private final ServerRequest request;
 
         // Whether to stop attempting to login or not
-        private boolean stop;
+        public boolean stop;
 
 
         //
@@ -76,6 +117,9 @@ public class UserLoginActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        final FragmentManager fm = getFragmentManager();
+        final LoginPopup popup = new LoginPopup();
+        final Bundle args = new Bundle();
         if (resultCode == RESULT_OK) {
 
             // Place the email address the user typed in the account creation box into the email box
@@ -88,7 +132,14 @@ public class UserLoginActivity extends Activity {
                 emailTextView.setText(email);
 
                 // Start attempting to log in using the device code from creating the account
-                (new LoginPing(email, deviceCode)).start();
+                lp = new LoginPing(email, deviceCode);
+                lp.start();
+
+                args.putString("address",email);
+                args.putString("code",deviceCode);
+                args.putBoolean("registered",false);
+                popup.setArguments(args);
+                popup.show(fm, "Email Sent");
             }
         }
     }
@@ -97,6 +148,10 @@ public class UserLoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        final FragmentManager fm = getFragmentManager();
+        final LoginPopup popup = new LoginPopup();
+        final Bundle args = new Bundle();
 
         //
         if (Preferences.getUserKey(UserLoginActivity.this) != null) {
@@ -131,11 +186,22 @@ public class UserLoginActivity extends Activity {
                         String device_key = responseMessage.getString(Keys.DEVICE_CODE);
 
                         // Start checking for confirmation that the email was verified
-                        (new LoginPing(email, device_key)).start();
+                        lp = new LoginPing(email, device_key);
+                        lp.start();
+                        args.putString("address",email);
+                        args.putString("code",device_key);
+                        args.putBoolean("registered",true);
+                        popup.setArguments(args);
+                        popup.show(fm, "Email Sent");
+
                     }
                 });
             }
         });
 
+
+    }
+    public void cancelRequest(){
+        lp.stop = true;
     }
 }
