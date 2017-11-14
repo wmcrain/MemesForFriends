@@ -76,8 +76,11 @@ public class EditProfileActivity extends Activity{
         final FragmentManager fm = getFragmentManager();
         final BioPopup popup = new BioPopup();
         final Bundle args = new Bundle();
-
         final TextView bio = (TextView) findViewById(R.id.viewProfileBio);
+        final Button request = (Button) findViewById(R.id.requestFriend);
+        final Button block = (Button) findViewById(R.id.blockUser);
+        request.setVisibility(View.GONE);
+        block.setVisibility(View.GONE);
 
         bio.setOnClickListener(new View.OnClickListener() {
             @Override
