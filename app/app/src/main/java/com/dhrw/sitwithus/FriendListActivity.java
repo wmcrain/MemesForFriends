@@ -57,7 +57,7 @@ public class FriendListActivity extends Activity {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_friend_list);
 
-        ListView listView = (ListView) findViewById(R.id.friened_list);
+        ListView listView = (ListView) findViewById(R.id.friend_list);
         listView.setAdapter(new FriendArrayAdapter());
     }
 }

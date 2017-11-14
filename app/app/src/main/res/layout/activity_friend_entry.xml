@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/friend_entry"
+    android:id="@+id/friend_entry_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,11 +10,10 @@
         android:id="@+id/friend_entry_picture"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="23dp"
         tools:layout_editor_absoluteY="16dp" />
 
     <TextView
@@ -28,6 +27,5 @@
         android:text="FriendName"
         android:textAlignment="center"
         android:textSize="33sp"
-        app:layout_constraintStart_toEndOf="@+id/friend_entry_picture"
         tools:layout_editor_absoluteY="16dp" />
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

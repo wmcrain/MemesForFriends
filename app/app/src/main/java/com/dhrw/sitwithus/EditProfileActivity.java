@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.dhrw.sitwithus.server.ServerRequest;
@@ -76,8 +77,11 @@ public class EditProfileActivity extends Activity{
         final FragmentManager fm = getFragmentManager();
         final BioPopup popup = new BioPopup();
         final Bundle args = new Bundle();
-
         final TextView bio = (TextView) findViewById(R.id.viewProfileBio);
+        final Switch request = (Switch) findViewById(R.id.requestFriend);
+        final Button block = (Button) findViewById(R.id.blockUser);
+        //request.setVisibility(View.GONE);
+        //block.setVisibility(View.GONE);
 
         bio.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/friendListLayout"
+    android:id="@+id/friend_list_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:maxHeight="2000dp"
@@ -10,10 +10,10 @@
     android:minWidth="0dp">
 
     <ListView
-        android:id="@+id/friened_list"
+        android:id="@+id/friend_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp" />
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
