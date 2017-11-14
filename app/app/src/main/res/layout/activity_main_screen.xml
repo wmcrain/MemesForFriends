@@ -12,13 +12,13 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/meetupsMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Meetups" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/accmanageMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Account Management" />
@@ -27,8 +27,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/logoutMain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Log Out" />
@@ -37,8 +38,9 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
             />
+
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/contactdevsMain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Contact Developers" />

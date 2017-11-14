@@ -9,26 +9,19 @@
         android:layout_width="match_parent" android:layout_height="0dp" android:orientation="horizontal"
         android:layout_weight = ".1"
         >
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight = ".15"
-            android:gravity="center"
-            android:src="@mipmap/david"/>
-        <EditText
-            android:id="@+id/profileMatchEntry"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".75"
-            android:ems="10"
-            android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/matchaffinityMatchEntry"
+        <ImageView
+            android:id="@+id/profimageMeetupEntry"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".1"
-            android:ems="10"
-            android:inputType="text" />
+            android:layout_gravity="end"
+            android:layout_weight=".15"
+            android:src="@mipmap/david" />
+        <EditText
+            android:id="@+id/profileInMeetup"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:inputType="textPersonName"
+            android:layout_weight = ".85"/>
     </LinearLayout>
 </LinearLayout>

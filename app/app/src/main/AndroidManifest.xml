@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dhrw.sitwithus" >
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -26,6 +27,30 @@
 
         <activity android:name=".ViewProfileActivity">
         </activity>
+
+        <activity android:name=".AccountManageActivity">
+        </activity>
+
+        <activity android:name=".EditProfileActivity">
+        </activity>
+
+        <activity android:name=".MeetupSearchActivity">
+        </activity>
+
+        <activity android:name=".UserContactDevs">
+        </activity>
+
+        <activity android:name=".UserLogoutActivity">
+        </activity>
+
+        <activity android:name=".ViewMeetupHistoryActivity">
+        </activity>
+
+        <activity android:name=".BlockListActivity">
+        </activity>
+
+
+
 
     </application>
 
