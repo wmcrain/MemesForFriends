@@ -36,6 +36,7 @@
             android:id="@+id/viewProfileBio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="20dp"
             android:paddingTop="8dp"/>
 
     <ListView
@@ -51,7 +52,7 @@
          android:layout_height="wrap_content"
          android:orientation="horizontal">
 
-         <Button
+         <Switch
              android:id="@+id/requestFriend"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
