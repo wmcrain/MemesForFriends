@@ -19,11 +19,14 @@ class User(ndb.Model):
     first_name = ndb.StringProperty(indexed=False)
     last_name = ndb.StringProperty(indexed=False)
 
-    bio = ndb.StringProperty(indexed=False)
-    picture = ndb.BlobProperty(indexed=False)
+    bio = ndb.StringProperty(indexed=False, default="Empty bio...")
+    picture = ndb.StringProperty(indexed=False, default=None)
 
     # Whether the user has verified their email or not
     verified = ndb.BooleanProperty(required=True, indexed=False)
+
+    current_meetup = ndb.KeyProperty(kind='Meetup', indexed=False, default=None)
+    previous_meetups = ndb.KeyProperty(kind='Meetup', indexed=False, repeated=True)
 
     def get_create_link(self, active_time):
         """ Retrieves a link used to verify the account of the user. 
@@ -130,5 +133,35 @@ class VerficationLink(ndb.Model):
         link.link = '{}/{}?{}={}'.format(DOMAIN, op, Keys.LINK_PARAM, link.param)
     
         return link
+
+class Meetup(ndb.Model):
+    time_formed = ndb.DateTimeProperty(auto_now_add=True, indexed=False)
+    current_users = ndb.KeyProperty(kind='User', indexed=False, repeated=True)
+    previous_users = ndb.KeyProperty(kind='User', indexed=False, repeated=True)
+
+    search_entity = ndb.KeyProperty(kind='SearchEntity', indexed=False, default=None)
+
+class SearchEntity(ndb.Model):
+    latitude = ndb.FloatProperty(required=True)
+    longitude = ndb.FloatProperty(required=True)
+
+    willing_matches = ndb.KeyProperty(kind='Meetup', repeated=True)
+    confirmed_matches = ndb.KeyProperty(kind='Meetup', repeated=True)
+
+    def distance(self, other):
+        earth_radius = 6371 # The radius of earth in kilometers
+
+        #Calculate Distance based in Haversine Formula
+        dlat = math.radians(other.latitude - self.latitude)
+        dlon = math.radians(other.longitude - self.longitude)
+
+        a = (math.sin(dlat / 2) * math.sin(dlat / 2) 
+            + math.cos(math.radians(self.latitude)) 
+            * math.cos(math.radians(other.latitude)) 
+            * math.sin(dlon / 2) * math.sin(dlon / 2))
+
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+        d = earth_radius * c
+        return d
 
 

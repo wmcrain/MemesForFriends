@@ -3,6 +3,7 @@ package com.dhrw.sitwithus.server;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.util.Base64;
 import android.util.Log;
 
 import com.dhrw.sitwithus.util.Keys;
@@ -82,6 +83,10 @@ public class ServerRequest {
     public void sendRequest(final Callback callback, final int timeOut) {
         AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
 
+            boolean successful;
+            String responseMessage;
+            int responseCode;
+
             @Override
             protected Void doInBackground(Void... params) {
                 try {
@@ -106,8 +111,8 @@ public class ServerRequest {
 
                     // Retrieve the HTTP response code. A successful response will have a response
                     // code in the 200s
-                    int responseCode = con.getResponseCode();
-                    boolean successful = responseCode >= 200 && responseCode < 300;
+                    responseCode = con.getResponseCode();
+                    successful = responseCode >= 200 && responseCode < 300;
 
                     // Read the response from the server
                     BufferedReader in;
@@ -126,17 +131,25 @@ public class ServerRequest {
 
                     // Call the correct callback depending if the response code represents a
                     // successful response or not.
-                    if (successful) {
-                        callback.onSuccess(responseCode, new ServerResponse(response.toString()));
-                    } else {
-                        callback.onError(responseCode, response.toString());
-                    }
+                    responseMessage = response.toString();
 
                 } catch (IOException e) {
-                    callback.onError(-1, e.toString());
+                    responseCode = -1;
+                    responseMessage = e.toString();
                 }
 
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+                if (successful) {
+                    callback.onSuccess(responseCode, new ServerResponse(responseMessage));
+                } else {
+                    callback.onError(responseCode, responseMessage);
+                }
             }
         };
 
@@ -252,17 +265,19 @@ public class ServerRequest {
 
             // Add the new profile picture if it was provided
             if (picture != null) {
+                float aspect = picture.getWidth() / picture.getHeight();
+                picture = Bitmap.createScaledBitmap(picture, (int) (200 * aspect), (int) (200 / aspect), true);
+
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
                 // Put the UTF-8 string representation of the bytes of the file in the request data
-                String pictureBytes = new String(stream.toByteArray(), CHARSET);
-                data.put(Keys.PICTURE, pictureBytes);
+                data.put(Keys.PICTURE, Base64.encodeToString(stream.toByteArray(), Base64.URL_SAFE));
             }
 
             return new ServerRequest(DIR_PROFILE_SET, data);
 
-        } catch (JSONException|UnsupportedEncodingException e) {
+        } catch (JSONException e) {
             throw new IllegalArgumentException("Unable to create login ping request.");
         }
     }

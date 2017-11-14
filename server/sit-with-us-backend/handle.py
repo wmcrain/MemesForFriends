@@ -26,6 +26,11 @@ class Keys():
     LAST_NAME = "last_name"
     BIO = "bio"
     PICTURE = "picture"
+    PROFILE = "profile"
+    SEARCH_ENTITY_KEY = "seach_entity_key"
+    MEETUP_KEY = "meetup_key"
+    LATITUDE = "latitude"
+    LONGITUDE = "longitude"
 
 
 class Links():

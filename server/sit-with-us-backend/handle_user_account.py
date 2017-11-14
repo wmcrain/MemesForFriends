@@ -44,7 +44,7 @@ class CreateUserHandler(ApiHandler):
 
         # Create a new unverified user and put the user in the database
         user = User(username=username, email=email, phone=phone, verified=False, 
-            first_name=first_name, last_name=last_name)
+            first_name=first_name, last_name=last_name, current_meetup=None)
         user.put()
 
         # 
@@ -137,7 +137,10 @@ class LoginUserHandler(ApiHandler):
         mail.EmailMessage(sender=AUTHORIZED_EMAIL, to=email,
             subject='Log In To Your Account', html=email_body).send()
 
-        return { Keys.SUCCESS : 1, Keys.DEVICE_KEY : link.device_code }
+        return { 
+            Keys.SUCCESS : 1, 
+            Keys.DEVICE_KEY : link.device_code, 
+        }
 
 
 class LoginEmailHandler(webapp2.RequestHandler):
@@ -184,6 +187,10 @@ class LoginPingHandler(ApiHandler):
         # Login will succeed if the user clicked the link
         if links[0].used:
             links[0].key.delete()
-            return { Keys.SUCCESS : 1, Keys.USER_KEY : users[0].key.urlsafe() }
+            return { 
+                Keys.SUCCESS : 1, 
+                Keys.USER_KEY : users[0].key.urlsafe(),
+                Keys.USERNAME : users[0].username,
+            }
         else:
             return { Keys.SUCCESS : 0 }

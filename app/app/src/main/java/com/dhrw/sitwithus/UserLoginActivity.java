@@ -1,6 +1,7 @@
 package com.dhrw.sitwithus;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.dhrw.sitwithus.server.ServerRequest;
 import com.dhrw.sitwithus.server.ServerResponse;
 import com.dhrw.sitwithus.util.Keys;
+import com.dhrw.sitwithus.util.Preferences;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,8 +29,6 @@ public class UserLoginActivity extends Activity {
         // Whether to stop attempting to login or not
         private boolean stop;
 
-        // The key of the user retrieved from login succeeds
-        private String userKey;
 
         //
         private final ServerRequest.Callback requestCallback = new ServerRequest.Callback() {
@@ -38,11 +38,13 @@ public class UserLoginActivity extends Activity {
                 Log.d("SitWithUs", "Receive " + responseMessage.toString());
                 if (responseMessage.getInt(Keys.SUCCESS) == 1) {
                     stop = true;
-                    userKey = responseMessage.getString(Keys.USER_KEY);
 
                     //
-                    /*getSharedPreferences("u", MODE_PRIVATE).edit()
-                            .putString(ServerRequest.KEY_USER_KEY, userKey);*/
+                    Preferences.setUserKey(UserLoginActivity.this,
+                            responseMessage.getString(Keys.USER_KEY));
+
+                    Preferences.setUsername(UserLoginActivity.this,
+                            responseMessage.getString(Keys.USERNAME));
 
                     startActivity(new Intent(UserLoginActivity.this, MainActivity.class));
                 }
@@ -96,6 +98,11 @@ public class UserLoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //
+        if (Preferences.getUserKey(UserLoginActivity.this) != null) {
+            //startActivity(new Intent(UserLoginActivity.this, MainActivity.class));
+        }
+
         // Go to the sign up screen when the sign up button is pressed
         Button signUpButton = (Button) findViewById(R.id.btn_goto_sign_up);
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +123,7 @@ public class UserLoginActivity extends Activity {
                 final String email = ((TextView) findViewById(R.id.txt_login_email_address))
                         .getText().toString().trim();
 
-                //
+                // Start pinging for log in
                 ServerRequest request = ServerRequest.createLoginRequest(email);
                 request.sendRequest(new ServerRequest.Callback() {
                     @Override
@@ -127,12 +134,6 @@ public class UserLoginActivity extends Activity {
                         (new LoginPing(email, device_key)).start();
                     }
                 });
-
-                // Start pinging for log in
-
-                //
-                //Intent myIntent = new Intent(UserLoginActivity.this, MainActivity.class);
-                //startActivity(myIntent);
             }
         });
 

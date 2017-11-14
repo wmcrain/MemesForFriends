@@ -12,4 +12,5 @@ public class Keys {
     public static final String USER_KEY = "user_key";
     public static final String BIO = "bio";
     public static final String PICTURE = "picture";
+    public static final String PROFILE = "profile";
 }

@@ -2,11 +2,15 @@ package com.dhrw.sitwithus.server;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServerResponse {
 
@@ -19,6 +23,10 @@ public class ServerResponse {
         } catch (JSONException e) {
             throw new RuntimeException(e.toString());
         }
+    }
+
+    private ServerResponse(JSONObject response) {
+        this.response = response;
     }
 
     /** */
@@ -46,11 +54,24 @@ public class ServerResponse {
 
     public Bitmap getImage(String name) {
         try {
-            byte[] pictureBytes = response.getString(name).getBytes(ServerRequest.CHARSET);
+            byte[] pictureBytes = Base64.decode(response.getString(name), Base64.URL_SAFE);
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inMutable = true;
             return BitmapFactory.decodeByteArray(pictureBytes, 0, pictureBytes.length, options);
-        } catch (JSONException|UnsupportedEncodingException e) {
+        } catch (JSONException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    public List<ServerResponse> getDictArray(String name) {
+        ArrayList<ServerResponse> result = new ArrayList<>();
+        try {
+            JSONArray a = response.getJSONArray(name);
+            for (int i = 0; i < a.length(); i++) {
+                result.add(new ServerResponse( (JSONObject) a.get(i)));
+            }
+            return result;
+        } catch (JSONException e) {
             throw new RuntimeException(e.toString());
         }
     }

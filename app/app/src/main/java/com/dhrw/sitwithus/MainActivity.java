@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.dhrw.sitwithus.util.Preferences;
+
 public class MainActivity extends Activity {
 
     @Override
@@ -35,6 +37,7 @@ public class MainActivity extends Activity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Preferences.setUserKey(MainActivity.this, null);
                 Intent myIntent = new Intent(MainActivity.this, UserLogoutActivity.class);
                 startActivityForResult(myIntent, 0);
             }

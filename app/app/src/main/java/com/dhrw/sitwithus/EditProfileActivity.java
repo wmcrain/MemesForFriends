@@ -19,6 +19,11 @@ import android.widget.ImageView;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dhrw.sitwithus.server.ServerRequest;
+import com.dhrw.sitwithus.server.ServerResponse;
+import com.dhrw.sitwithus.util.Keys;
+import com.dhrw.sitwithus.util.Preferences;
+
 import java.io.File;
 import java.net.URI;
 
@@ -96,12 +101,41 @@ public class EditProfileActivity extends Activity{
             }
         });
 
+
+        ServerRequest getProfile = ServerRequest.createGetProfileRequest(
+                Preferences.getUserKey(this),
+                Preferences.getUsername(this));
+
+        final TextView nameView = (TextView) findViewById(R.id.name_age);
+
+        getProfile.sendRequest(new ServerRequest.Callback() {
+            @Override
+            public void onSuccess(int responseCode, ServerResponse responseMessage) {
+                super.onSuccess(responseCode, responseMessage);
+
+                ServerResponse profile = responseMessage.getDictArray(Keys.PROFILE).get(0);
+
+                nameView.setText(profile.getString(Keys.FIRST_NAME) + " "
+                        + profile.getString(Keys.LAST_NAME));
+
+                if (profile.has(Keys.BIO)) {
+                    bio.setText(profile.getString(Keys.BIO));
+                }
+
+                if (profile.has(Keys.PICTURE)) {
+                    pic.setImageBitmap(profile.getImage(Keys.PICTURE));
+                }
+            }
+        });
     }
 
     public void setBio(String newBio){
         final TextView bio = (TextView) findViewById(R.id.viewProfileBio);
-        //send it to the server here
         bio.setText(newBio);
+
+        ServerRequest updateProfile = ServerRequest.createUpdateProfileRequest(
+                Preferences.getUserKey(this), newBio, null);
+        updateProfile.sendRequest(new ServerRequest.Callback() { });
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -122,12 +156,15 @@ public class EditProfileActivity extends Activity{
             ImageView pic = (ImageView) findViewById(R.id.viewProfilePic);
             Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
             bitmap = Bitmap.createScaledBitmap(bitmap, pic.getWidth(), pic.getHeight(), true);
-            //send it to the server here
+
+            ServerRequest updateProfile = ServerRequest.createUpdateProfileRequest(
+                    Preferences.getUserKey(this), null, bitmap);
+            updateProfile.sendRequest(new ServerRequest.Callback() { });
+
             pic.setImageBitmap(bitmap);
 
         }
 
 
     }
-
 }
