@@ -5,29 +5,17 @@
     android:paddingRight="@dimen/activity_horizontal_margin">
     <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
         android:weightSum = "1" android:orientation="vertical">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:weightSum = "1"
+        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp"
             android:orientation="horizontal" android:layout_weight = ".1">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".15"/>
 
             <TextView
                 android:id="@+id/headerInMeetup"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".7"
                 android:ems="10"
                 android:gravity="center"
                 android:inputType="none"
                 android:text="MEETUP" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".15">
-            </View>
 
 
         </LinearLayout>
