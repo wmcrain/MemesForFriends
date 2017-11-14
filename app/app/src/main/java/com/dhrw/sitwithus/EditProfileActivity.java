@@ -3,7 +3,13 @@ package com.dhrw.sitwithus;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +19,13 @@ import android.widget.ImageView;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.File;
 import java.net.URI;
 
 
 public class EditProfileActivity extends Activity{
+
+    private static int RESULT_LOAD_IMAGE = 1;
 
     public static class BioPopup extends DialogFragment {
 
@@ -32,6 +41,7 @@ public class EditProfileActivity extends Activity{
             cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    enterBio.setText(biography);
                     dismiss();
                 }
             });
@@ -56,6 +66,8 @@ public class EditProfileActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
 
+        //TO-DO - get the bio and pic from the server instead of hardcoding in the xml
+
         final FragmentManager fm = getFragmentManager();
         final BioPopup popup = new BioPopup();
         final Bundle args = new Bundle();
@@ -77,7 +89,10 @@ public class EditProfileActivity extends Activity{
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //edit the pic here
+                Intent i = new Intent(
+                        Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
 
@@ -85,11 +100,33 @@ public class EditProfileActivity extends Activity{
 
     public void setBio(String newBio){
         final TextView bio = (TextView) findViewById(R.id.viewProfileBio);
+        //send it to the server here
         bio.setText(newBio);
     }
 
-    public void setImage(URI newImage){
-        final ImageView pic = (ImageView) findViewById(R.id.viewProfilePic);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            ImageView pic = (ImageView) findViewById(R.id.viewProfilePic);
+            Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+            bitmap = Bitmap.createScaledBitmap(bitmap, pic.getWidth(), pic.getHeight(), true);
+            //send it to the server here
+            pic.setImageBitmap(bitmap);
+
+        }
+
 
     }
 
