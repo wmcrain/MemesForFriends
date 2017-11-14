@@ -80,8 +80,8 @@ public class EditProfileActivity extends Activity{
         final TextView bio = (TextView) findViewById(R.id.viewProfileBio);
         final Switch request = (Switch) findViewById(R.id.requestFriend);
         final Button block = (Button) findViewById(R.id.blockUser);
-        //request.setVisibility(View.GONE);
-        //block.setVisibility(View.GONE);
+        request.setVisibility(View.GONE);
+        block.setVisibility(View.GONE);
 
         bio.setOnClickListener(new View.OnClickListener() {
             @Override
