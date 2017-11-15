@@ -49,7 +49,15 @@
         <activity android:name=".BlockListActivity">
         </activity>
 
+        <activity android:name=".MeetupSearchPendingActivity">
+        </activity>
 
+        <activity android:name=".FriendListActivity">
+        </activity>
+
+
+        <service android:name=".MeetupSearchService">
+        </service>
 
 
     </application>

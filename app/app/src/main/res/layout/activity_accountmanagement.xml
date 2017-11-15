@@ -9,12 +9,11 @@
         <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:weightSum = "1"
             android:orientation="horizontal" android:layout_weight = ".1">
 
-
-            <ImageButton
-                android:id="@+id/backbuttonManage"
+            <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".15"/>
+                android:layout_weight=".15">
+            </View>
 
             <TextView
                 android:id="@+id/headerManage"
@@ -58,7 +57,7 @@
             android:layout_weight=".0225"/>
 
         <Button
-            android:id="@+id/friendslistManage"
+            android:id="@+id/friendlistManage"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight=".2"

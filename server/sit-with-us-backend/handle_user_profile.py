@@ -53,6 +53,16 @@ class SetProfileHandler(ApiHandler):
 
         return { Keys.SUCCESS : 1 }
 
+class GetFriendsHandler(ApiHandler):
+    def handle(self):
+        user_key = self.getParam(Keys.USER_KEY)
+        user = ndb.Key(urlsafe=user_key).get()
+
+        return { 
+            Keys.SUCCESS : 1, 
+            Keys.USERNAME : [x.get().username for x in user.friends]
+        }
+
 class ToggleFriendHandler(ApiHandler):
     def handle(self):
         

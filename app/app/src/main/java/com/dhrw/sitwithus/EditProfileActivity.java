@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.dhrw.sitwithus.data.Profile;
 import com.dhrw.sitwithus.server.ServerRequest;
 import com.dhrw.sitwithus.server.ServerResponse;
 import com.dhrw.sitwithus.util.Keys;
@@ -80,8 +81,8 @@ public class EditProfileActivity extends Activity{
         final TextView bio = (TextView) findViewById(R.id.viewProfileBio);
         final Switch request = (Switch) findViewById(R.id.requestFriend);
         final Button block = (Button) findViewById(R.id.blockUser);
-        //request.setVisibility(View.GONE);
-        //block.setVisibility(View.GONE);
+        request.setVisibility(View.GONE);
+        block.setVisibility(View.GONE);
 
         bio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,17 +118,14 @@ public class EditProfileActivity extends Activity{
             public void onSuccess(int responseCode, ServerResponse responseMessage) {
                 super.onSuccess(responseCode, responseMessage);
 
-                ServerResponse profile = responseMessage.getDictArray(Keys.PROFILE).get(0);
+                Profile profile = responseMessage.getProfileArray(Keys.PROFILE).get(0);
 
-                nameView.setText(profile.getString(Keys.FIRST_NAME) + " "
-                        + profile.getString(Keys.LAST_NAME));
+                nameView.setText(profile.firstName+ " " + profile.lastName);
 
-                if (profile.has(Keys.BIO)) {
-                    bio.setText(profile.getString(Keys.BIO));
-                }
+                bio.setText(profile.bio);
 
-                if (profile.has(Keys.PICTURE)) {
-                    pic.setImageBitmap(profile.getImage(Keys.PICTURE));
+                if (profile.picture != null) {
+                    pic.setImageBitmap(profile.picture);
                 }
             }
         });
