@@ -17,7 +17,8 @@ import java.util.List;
 
 import com.dhrw.sitwithus.data.Profile;
 
-import org.w3c.dom.Text;
+import android.widget.Button;
+
 
 public class BlockListActivity extends Activity {
 
@@ -43,15 +44,14 @@ public class BlockListActivity extends Activity {
             else
                 pic.setImageResource(R.mipmap.david);
 
-            Button delete = (Button) findViewById(R.id.);
+            Button delete = (Button) findViewById(R.id.block_list_remove_btn);
 
-            view.setOnClickListener(new View.OnClickListener() {
+            delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    blocked.remove(position);
                 }
             });
-
 
             return view;
         }
