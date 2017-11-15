@@ -12,8 +12,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="26dp"
-        android:layout_marginTop="23dp"
-        app:srcCompat="@drawable/abc_btn_radio_to_on_mtrl_015" />
+        android:layout_marginTop="23dp" />
 
     <TextView
         android:id="@+id/block_entry_name"
