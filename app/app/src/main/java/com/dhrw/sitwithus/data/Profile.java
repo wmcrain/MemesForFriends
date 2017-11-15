@@ -1,8 +1,23 @@
-package com.dhrw.sitwithus.database;
+package com.dhrw.sitwithus.data;
 
-/**
- * Created by ryanmitchell on 11/14/17.
- */
+import android.graphics.Bitmap;
 
 public class Profile {
+
+    public String username;
+    public String firstName;
+    public String lastName;
+    public String bio;
+
+    public Bitmap picture;
+
+    public Profile(String username, String firstName, String lastName, String bio,
+            Bitmap picture) {
+
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.bio = bio;
+        this.picture = picture;
+    }
 }

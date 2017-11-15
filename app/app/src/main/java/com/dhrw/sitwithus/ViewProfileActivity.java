@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dhrw.sitwithus.data.Profile;
 import com.dhrw.sitwithus.server.ServerRequest;
 import com.dhrw.sitwithus.server.ServerResponse;
 import com.dhrw.sitwithus.util.Keys;
@@ -27,7 +28,7 @@ public class ViewProfileActivity extends Activity{
 
         ServerRequest getProfile = ServerRequest.createGetProfileRequest(
                 Preferences.getUserKey(this),
-                Keys.USERNAME);
+                getIntent().getExtras().getString(Keys.USERNAME));
 
         final TextView nameView = (TextView) findViewById(R.id.name_age);
         final ImageView pic = (ImageView) findViewById(R.id.viewProfilePic);
@@ -38,17 +39,14 @@ public class ViewProfileActivity extends Activity{
             public void onSuccess(int responseCode, ServerResponse responseMessage) {
                 super.onSuccess(responseCode, responseMessage);
 
-                ServerResponse profile = responseMessage.getDictArray(Keys.PROFILE).get(0);
+                Profile profile = responseMessage.getProfileArray(Keys.PROFILE).get(0);
 
-                nameView.setText(profile.getString(Keys.FIRST_NAME) + " "
-                        + profile.getString(Keys.LAST_NAME));
+                nameView.setText(profile.firstName+ " " + profile.lastName);
 
-                if (profile.has(Keys.BIO)) {
-                    bio.setText(profile.getString(Keys.BIO));
-                }
+                bio.setText(profile.bio);
 
-                if (profile.has(Keys.PICTURE)) {
-                    pic.setImageBitmap(profile.getImage(Keys.PICTURE));
+                if (profile.picture != null) {
+                    pic.setImageBitmap(profile.picture);
                 }
             }
         });

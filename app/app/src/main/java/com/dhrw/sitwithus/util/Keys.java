@@ -13,4 +13,7 @@ public class Keys {
     public static final String BIO = "bio";
     public static final String PICTURE = "picture";
     public static final String PROFILE = "profile";
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
+    public static final String MEETUP_KEY = "meetup_key";
 }

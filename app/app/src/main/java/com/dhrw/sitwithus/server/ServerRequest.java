@@ -43,6 +43,7 @@ public class ServerRequest {
     private static final String DIR_LOGIN_PING = "login/ping";
     private static final String DIR_PROFILE_GET = "profile/get";
     private static final String DIR_PROFILE_SET = "profile/set";
+    private static final String DIR_FRIENDS_GET = "friends/get";
     
     /** Holds the methods that will be called when the response has arrived from the server. */
     public static abstract class Callback {
@@ -81,6 +82,7 @@ public class ServerRequest {
 
     /** */
     public void sendRequest(final Callback callback, final int timeOut) {
+        Log.d("SitWithUs", requestMessage);
         AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
 
             boolean successful;
@@ -305,4 +307,44 @@ public class ServerRequest {
             throw new IllegalArgumentException("Unable to create get profile request.");
         }
     }
+
+    public static ServerRequest createGetFriends(String userKey) {
+
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
+            return new ServerRequest(DIR_FRIENDS_GET, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
+    public static ServerRequest createStartSearchRequest(String userKey, float latitude,
+            float longitude) {
+
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
+            data.put(Keys.LATITUDE, latitude);
+            data.put(Keys.LONGITUDE, longitude);
+            return new ServerRequest(DIR_LOGIN_PING, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
+    public static ServerRequest createStopSearchRequest(String meetupKey) {
+
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.MEETUP_KEY, meetupKey);
+            return new ServerRequest(DIR_LOGIN_PING, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
 }

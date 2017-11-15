@@ -25,6 +25,10 @@ class User(ndb.Model):
     # Whether the user has verified their email or not
     verified = ndb.BooleanProperty(required=True, indexed=False)
 
+    # 
+    friends = ndb.KeyProperty(kind='User', indexed=False, repeated=True)
+    blocked = ndb.KeyProperty(kind='User', indexed=False, repeated=True)
+
     current_meetup = ndb.KeyProperty(kind='Meetup', indexed=False, default=None)
     previous_meetups = ndb.KeyProperty(kind='Meetup', indexed=False, repeated=True)
 
@@ -67,6 +71,7 @@ class User(ndb.Model):
         """
         link = VerficationLink.create_link(self.key, Links.LINK_LOGIN, active_time)
         link.put()
+
         return link
 
 

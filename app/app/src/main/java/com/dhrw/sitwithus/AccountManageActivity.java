@@ -17,8 +17,9 @@ public class AccountManageActivity extends Activity {
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(AccountManageActivity.this, EditProfileActivity.class);
-                startActivityForResult(myIntent, 0);
+                Intent myIntent = new Intent(AccountManageActivity.this,
+                        EditProfileActivity.class);
+                startActivity(myIntent);
             }
         });
 
@@ -26,26 +27,30 @@ public class AccountManageActivity extends Activity {
         meetupHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(AccountManageActivity.this, ViewMeetupHistoryActivity.class);
-                startActivityForResult(myIntent, 0);
+                Intent myIntent = new Intent(AccountManageActivity.this,
+                        ViewMeetupHistoryActivity.class);
+                startActivity(myIntent);
             }
         });
 
-        Button friendslist = (Button) findViewById(R.id.friendlistManage);
+        Button friendslist = (Button) findViewById(R.id.friendslistManage);
         friendslist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(AccountManageActivity.this, FriendListActivity.class);
-                startActivityForResult(myIntent, 0);
+                Intent myIntent = new Intent(AccountManageActivity.this,
+                        FriendListActivity.class);
+                startActivity(myIntent);
             }
         });
+
 
         Button blocklist = (Button) findViewById(R.id.blocklistManage);
         blocklist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(AccountManageActivity.this, BlockListActivity.class);
-                startActivityForResult(myIntent, 0);
+                Intent myIntent = new Intent(AccountManageActivity.this,
+                        BlockListActivity.class);
+                startActivity(myIntent);
             }
         });
     }

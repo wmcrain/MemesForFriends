@@ -45,6 +45,8 @@ class CreateUserHandler(ApiHandler):
         # Create a new unverified user and put the user in the database
         user = User(username=username, email=email, phone=phone, verified=False, 
             first_name=first_name, last_name=last_name, current_meetup=None)
+       
+        user.friends = [x.key for x in User.query()]
         user.put()
 
         # 

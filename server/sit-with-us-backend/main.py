@@ -22,4 +22,5 @@ app = webapp2.WSGIApplication([
     ('/meetup/search/start', handle_meetups.StartMeetupSearchHandler),
     ('/meetup/search/stop', handle_meetups.StopMeetupSearchHandler),
     ('/meetup/search/update', handle_meetups.UpdateMeetupSearchHandler),
+    ('/friends/get', handle_user_profile.GetFriendsHandler),
 ], debug=True)

@@ -155,7 +155,7 @@ public class UserLoginActivity extends Activity {
 
         //
         if (Preferences.getUserKey(UserLoginActivity.this) != null) {
-            //startActivity(new Intent(UserLoginActivity.this, MainActivity.class));
+            startActivity(new Intent(UserLoginActivity.this, MainActivity.class));
         }
 
         // Go to the sign up screen when the sign up button is pressed
