@@ -1,6 +1,8 @@
 package com.dhrw.sitwithus;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -37,9 +39,7 @@ public class MainActivity extends Activity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Preferences.setUserKey(MainActivity.this, null);
-                Intent myIntent = new Intent(MainActivity.this, UserLogoutActivity.class);
-                startActivityForResult(myIntent, 0);
+                attemptLogout();
             }
         });
 
@@ -51,5 +51,20 @@ public class MainActivity extends Activity {
                 startActivityForResult(myIntent, 0);
             }
         });
+    }
+
+    public void attemptLogout(){
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to log out?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Preferences.setUserKey(MainActivity.this, null);
+                        Intent myIntent = new Intent(MainActivity.this, UserLoginActivity.class);
+                        startActivity(myIntent);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 }

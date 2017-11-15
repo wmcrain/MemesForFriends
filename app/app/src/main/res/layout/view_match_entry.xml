@@ -14,20 +14,26 @@
             android:layout_weight = ".15"
             android:gravity="center"
             android:src="@mipmap/david"/>
-        <EditText
+        <TextView
             android:id="@+id/profileMatchEntry"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".75"
+            android:layout_weight=".6"
             android:ems="10"
             android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/matchaffinityMatchEntry"
+        <TextView
+            android:id="@+id/distanceMatchEntry"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".1"
+            android:layout_weight=".15"
             android:ems="10"
             android:inputType="text" />
+
+        <Switch
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".15"
+            android:text=""/>
     </LinearLayout>
 </LinearLayout>

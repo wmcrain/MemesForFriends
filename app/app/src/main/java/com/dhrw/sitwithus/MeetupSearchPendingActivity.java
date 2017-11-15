@@ -6,16 +6,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class MeetupSearchActivity extends Activity {
+public class MeetupSearchPendingActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meetup_search);
+        setContentView(R.layout.activity_meetup_searchpending);
         //push the user that called this to the server
         //run a constant thread that updates every ~60s that pushes new user information
         //pull users from database that are located within certain area of the user
 
-        Button stopSearch = (Button) findViewById(R.id.stopSearch);
+        Button stopSearch = (Button) findViewById(R.id.stopSearchPending);
         stopSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -24,24 +24,23 @@ public class MeetupSearchActivity extends Activity {
                 //the thread has been stopped
             }
         });
-        Button matched = (Button) findViewById(R.id.matchedSearch);
+        Button matched = (Button) findViewById(R.id.matchedSearchPending);
         matched.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(MeetupSearchActivity.this, MeetupSearchPendingActivity.class);
-                startActivityForResult(myIntent, 0);
             }
         });
 
-        Button unmatched = (Button) findViewById(R.id.unmatchedSearch);
+        Button unmatched = (Button) findViewById(R.id.unmatchedSearchPending);
         unmatched.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent myIntent = new Intent(MeetupSearchPendingActivity.this, MeetupSearchActivity.class);
+                startActivityForResult(myIntent, 0);
             }
         });
 
         //code for swiping needs to be added
         //code for swapping between already swiped users and to be swiped users needs to be added
-
     }
 }

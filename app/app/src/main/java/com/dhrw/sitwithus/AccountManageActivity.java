@@ -31,15 +31,15 @@ public class AccountManageActivity extends Activity {
             }
         });
 
-     /* Commenting out until Hazem commits his Friends List stuff
-      Button friendslist = findViewById(R.id.friendslistManage);
+        Button friendslist = (Button) findViewById(R.id.friendlistManage);
         friendslist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(AccountManageActivity.this, FriendsListActivity.class);
+                Intent myIntent = new Intent(AccountManageActivity.this, FriendListActivity.class);
                 startActivityForResult(myIntent, 0);
             }
-        });*/
+        });
+
         Button blocklist = (Button) findViewById(R.id.blocklistManage);
         blocklist.setOnClickListener(new View.OnClickListener() {
             @Override
