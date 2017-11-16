@@ -1,8 +1,5 @@
 package com.dhrw.sitwithus;
 
-/**
- * Created by Hazem on 11/9/17.
- */
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

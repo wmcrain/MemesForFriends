@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Switch;
 import android.widget.CompoundButton;
 
+import com.dhrw.sitwithus.data.MeetupStub;
 import com.dhrw.sitwithus.data.Profile;
 import com.dhrw.sitwithus.server.ServerRequest;
 import com.dhrw.sitwithus.util.Keys;
@@ -26,7 +27,13 @@ import java.util.List;
 
 public class MeetupSearchActivity extends Activity {
 
-    List<Profile> matches;
+    List<MeetupStub> matches = new ArrayList<>();
+    MeetupStub Will = new MeetupStub("wmcrain", "Will", "Crain", "Hello, world!", 3.82);
+    MeetupStub Ryan = new MeetupStub("rmitchell", "Ryan", "Mitchell", "World, hello!",3.21);
+    MeetupStub Hazem = new MeetupStub("htashkandi", "Hazem", "Tashkandi", "Salutations, world!", 1.23);
+    MeetupStub David = new MeetupStub("dglenn", "David", "Glenn", "Greetings, world!", .28);
+
+
 
     private class UserSearchAdapter extends ArrayAdapter {
 
@@ -37,7 +44,7 @@ public class MeetupSearchActivity extends Activity {
         @NonNull
         @Override
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            final Profile profile = matches.get(position);
+            final MeetupStub profile = matches.get(position);
 
             View view = LayoutInflater.from(MeetupSearchActivity.this).inflate(R.layout.view_match_entry, null);
             TextView name = (TextView) view.findViewById(R.id.profileMatchEntry);
@@ -50,7 +57,11 @@ public class MeetupSearchActivity extends Activity {
                 pic.setImageResource(R.mipmap.david);
             }
 
-            name.setOnClickListener(new View.OnClickListener() {
+            TextView GPS = (TextView) view.findViewById(R.id.distanceMatchEntry);
+            String q = String.valueOf(profile.GPS);
+            GPS.setText(q);
+
+         /*   name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent viewProfile = new Intent(MeetupSearchActivity.this,
@@ -58,9 +69,9 @@ public class MeetupSearchActivity extends Activity {
                     viewProfile.putExtra(Keys.USERNAME, profile.username);
                     startActivity(viewProfile);
                 }
-            });
+            });*/
 
-            Switch toggleMatched = (Switch)  findViewById(R.id.toggleMatchEntry);
+          Switch toggleMatched = (Switch) view.findViewById(R.id.toggleMatchEntry);
             toggleMatched.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                 @Override
@@ -74,6 +85,11 @@ public class MeetupSearchActivity extends Activity {
             });
             return view;
         }
+
+        @Override
+        public int getCount() {
+            return matches.size();
+        }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,22 +98,26 @@ public class MeetupSearchActivity extends Activity {
         //push the user that called this to the server
         //run a constant thread that updates every ~60s that pushes new user information
         //pull users from database that are located within certain area of the user
-        setContentView(R.layout.activity_friend_list);
 
         matches = new ArrayList<>();
+        matches.add(Will);
+        matches.add(Ryan);
+        matches.add(Hazem);
+        matches.add(David);
 
         final ListView listView = (ListView) findViewById(R.id.usersSearch);
 
 
-        final MeetupSearchActivity.UserSearchAdapter adapter = new UserSearchAdapter();
+        final UserSearchAdapter adapter = new UserSearchAdapter();
         listView.setAdapter(adapter);
 
         Button stopSearch = (Button) findViewById(R.id.stopSearch);
         stopSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                //stop the searching thread and take user out of screen like a  when
+                Intent myIntent = new Intent(MeetupSearchActivity.this, MainActivity.class);
+                startActivity(myIntent);
+                //stop the searching thread and take user out of screen when
                 //the thread has been stopped
             }
         });
