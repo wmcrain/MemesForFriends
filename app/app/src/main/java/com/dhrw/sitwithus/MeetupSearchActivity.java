@@ -58,10 +58,10 @@ public class MeetupSearchActivity extends Activity {
             }
 
             TextView GPS = (TextView) view.findViewById(R.id.distanceMatchEntry);
-            String q = String.valueOf(profile.GPS);
+            String q = String.valueOf(profile.GPS)+" mi";
             GPS.setText(q);
 
-         /*   name.setOnClickListener(new View.OnClickListener() {
+           name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent viewProfile = new Intent(MeetupSearchActivity.this,
@@ -69,7 +69,7 @@ public class MeetupSearchActivity extends Activity {
                     viewProfile.putExtra(Keys.USERNAME, profile.username);
                     startActivity(viewProfile);
                 }
-            });*/
+            });
 
           Switch toggleMatched = (Switch) view.findViewById(R.id.toggleMatchEntry);
             toggleMatched.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
