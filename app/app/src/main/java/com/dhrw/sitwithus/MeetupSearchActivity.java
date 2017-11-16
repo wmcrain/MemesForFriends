@@ -72,8 +72,6 @@ public class MeetupSearchActivity extends Activity {
                 }
 
             });
-
-            //View view = new View()
             return view;
         }
     }
