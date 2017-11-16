@@ -8,19 +8,24 @@
         android:layout_width="match_parent" android:layout_height="0dp" android:orientation="horizontal"
         android:layout_weight = ".1"
         >
+
         <ImageView
+            android:id="@+id/match_entry_picture"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight = ".15"
+            android:layout_weight=".15"
             android:gravity="center"
-            android:src="@mipmap/david"/>
+            android:src="@mipmap/david" />
+
         <TextView
             android:id="@+id/profileMatchEntry"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".6"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:clickable="true"
+            android:focusable="false"/>
 
         <TextView
             android:id="@+id/distanceMatchEntry"
@@ -31,9 +36,10 @@
             android:inputType="text" />
 
         <Switch
+            android:id="@+id/toggleMatchEntry"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".15"
-            android:text=""/>
+            android:text="" />
     </LinearLayout>
 </LinearLayout>

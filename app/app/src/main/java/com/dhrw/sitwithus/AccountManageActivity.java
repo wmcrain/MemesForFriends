@@ -33,7 +33,7 @@ public class AccountManageActivity extends Activity {
             }
         });
 
-        Button friendslist = (Button) findViewById(R.id.friendslistManage);
+        Button friendslist = (Button) findViewById(R.id.friendlistManage);
         friendslist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
