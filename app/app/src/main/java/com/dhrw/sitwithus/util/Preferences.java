@@ -10,14 +10,14 @@ public class Preferences {
                 .putString(Keys.USER_KEY, key).apply();
     }
 
-    public static void setMeetupKey(Context context, String key) {
+    public static void setSearchKey(Context context, String key) {
         context.getSharedPreferences("u", Context.MODE_PRIVATE).edit()
-                .putString(Keys.MEETUP_KEY, key).apply();
+                .putString(Keys.SEARCH_KEY, key).apply();
     }
 
-    public static String getMeetupKey(Context context) {
+    public static String getSearchKey(Context context) {
         return context.getSharedPreferences("u", Context.MODE_PRIVATE)
-                .getString(Keys.MEETUP_KEY, null);
+                .getString(Keys.SEARCH_KEY, null);
     }
 
     public static String getUserKey(Context context) {

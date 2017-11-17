@@ -15,14 +15,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dhrw.sitwithus.data.Profile;
+import com.dhrw.sitwithus.data.UserProfile;
 
 import android.widget.Button;
 //crashing
 
 public class BlockListActivity extends Activity {
 
-    List<Profile> blocked;
+    List<UserProfile> blocked;
     String[] testArray = {"Hazem", "Alex", "Ryan", "David","Will","Abdul","Casey","Sara","Josh"};
 
     private class BlockArrayAdapter extends ArrayAdapter {
@@ -32,7 +32,7 @@ public class BlockListActivity extends Activity {
         }
 
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            final Profile profile = blocked.get(position);
+            final UserProfile profile = blocked.get(position);
 
             View view = LayoutInflater.from(BlockListActivity.this).inflate(R.layout.activity_block_entry, null);
             TextView name = (TextView) findViewById(R.id.block_entry_name);
@@ -68,7 +68,7 @@ public class BlockListActivity extends Activity {
 
         blocked = new ArrayList<>();
 
-        final ListView listView = (ListView) findViewById(R.layout.activity_block_list);
+        final ListView listView = (ListView) findViewById(R.id.block_list);
 
 
         final BlockArrayAdapter adapter = new BlockArrayAdapter();

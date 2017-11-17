@@ -44,6 +44,9 @@ public class ServerRequest {
     private static final String DIR_PROFILE_GET = "profile/get";
     private static final String DIR_PROFILE_SET = "profile/set";
     private static final String DIR_FRIENDS_GET = "friends/get";
+    private static final String DIR_SEARCH_START = "meetup/search/start";
+    private static final String DIR_SEARCH_STOP = "meetup/search/stop";
+    private static final String DIR_SEARCH_UPDATE = "meetup/search/update";
     
     /** Holds the methods that will be called when the response has arrived from the server. */
     public static abstract class Callback {
@@ -73,6 +76,10 @@ public class ServerRequest {
     private ServerRequest(String directory, JSONObject requestData) {
         this.directory = directory;
         this.requestMessage = requestData.toString();
+    }
+
+    public void sendRequest() {
+        sendRequest(new Callback() { }, 5000);
     }
 
     /** */
@@ -328,19 +335,41 @@ public class ServerRequest {
             data.put(Keys.USER_KEY, userKey);
             data.put(Keys.LATITUDE, latitude);
             data.put(Keys.LONGITUDE, longitude);
-            return new ServerRequest(DIR_LOGIN_PING, data);
+            return new ServerRequest(DIR_SEARCH_START, data);
 
         } catch (JSONException e) {
             throw new IllegalArgumentException("Unable to create login ping request.");
         }
     }
 
-    public static ServerRequest createStopSearchRequest(String meetupKey) {
+    public static ServerRequest createStopSearchRequest(String searchKey) {
 
         try {
             JSONObject data = new JSONObject();
-            data.put(Keys.MEETUP_KEY, meetupKey);
-            return new ServerRequest(DIR_LOGIN_PING, data);
+            data.put(Keys.SEARCH_KEY, searchKey);
+            return new ServerRequest(DIR_SEARCH_STOP, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
+    public static ServerRequest creaateUpdateSearchRequest(String searchKey,
+            float latitude, float longitude, ArrayList<String> willingSearchKeys) {
+
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.SEARCH_KEY, searchKey);
+            data.put(Keys.LATITUDE, latitude);
+            data.put(Keys.LONGITUDE, longitude);
+
+            JSONArray willingArray = new JSONArray();
+            for (String willingKeys : willingSearchKeys) {
+                willingArray.put(willingKeys);
+            }
+            data.put(Keys.WILLING_MATCHES, willingArray);
+
+            return new ServerRequest(DIR_SEARCH_UPDATE, data);
 
         } catch (JSONException e) {
             throw new IllegalArgumentException("Unable to create login ping request.");

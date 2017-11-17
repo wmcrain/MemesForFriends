@@ -27,16 +27,20 @@ class Keys():
     BIO = "bio"
     PICTURE = "picture"
     PROFILE = "profile"
-    SEARCH_ENTITY_KEY = "seach_entity_key"
+    SEARCH_KEY = "search_key"
     MEETUP_KEY = "meetup_key"
     LATITUDE = "latitude"
     LONGITUDE = "longitude"
+    DISTANCE = "distance"
+    WILLING_MATCHES = "willing_matches"
+    MATCHES = "matches"
 
 
 class Links():
     """ """
     LINK_CREATE = "create/verify"
     LINK_LOGIN = "login/verify"
+
 
 class MissingParameter(Exception):
     """ Thrown when a parameter is missing from the request JSON. """

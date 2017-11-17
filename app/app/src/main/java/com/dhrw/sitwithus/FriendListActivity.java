@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.dhrw.sitwithus.data.Profile;
+import com.dhrw.sitwithus.data.UserProfile;
 import com.dhrw.sitwithus.server.ServerRequest;
 import com.dhrw.sitwithus.server.ServerResponse;
 import com.dhrw.sitwithus.util.Keys;
@@ -24,7 +24,7 @@ import java.util.List;
 
 public class FriendListActivity extends Activity {
 
-    List<Profile> friends;
+    List<UserProfile> friends;
 
     String[] testArray = {"Hazem", "Alex", "Ryan", "David","Will","Abdul","Casey","Sara","Josh"};
     private class FriendArrayAdapter extends ArrayAdapter {
@@ -36,7 +36,7 @@ public class FriendListActivity extends Activity {
         @NonNull
         @Override
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            final Profile profile = friends.get(position);
+            final UserProfile profile = friends.get(position);
 
             View view = LayoutInflater.from(FriendListActivity.this).inflate(R.layout.activity_friend_entry, null);
             TextView name = (TextView) view.findViewById(R.id.friend_entry_name);

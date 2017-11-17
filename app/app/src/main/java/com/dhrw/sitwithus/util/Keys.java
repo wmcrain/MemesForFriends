@@ -15,5 +15,8 @@ public class Keys {
     public static final String PROFILE = "profile";
     public static final String LATITUDE = "latitude";
     public static final String LONGITUDE = "longitude";
-    public static final String MEETUP_KEY = "meetup_key";
+    public static final String SEARCH_KEY = "search_key";
+    public static final String WILLING_MATCHES = "willing_matches";
+    public static final String DISTANCE = "distance";
+    public static final String MATCHES = "matches";
 }

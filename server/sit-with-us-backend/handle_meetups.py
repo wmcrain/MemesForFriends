@@ -29,32 +29,55 @@ class StartMeetupSearchHandler(ApiHandler):
         else: 
             meetup = user.current_meetup.get()
 
-        if meetup.search_entity is None:
-            entity = SearchEntity(latitude=float(latitude), longitude=float(longitude))
+        entity = SearchEntity(meetup=meetup.key, latitude=float(latitude), longitude=float(longitude))
+        entity.put()
 
-            meetup.search_entity = entity.key
-            meetup.put()
-            entity.put()
-
-        return { Keys.SUCCESS : 1, Keys.MEETUP_KEY : meetup.key.urlsafe() }
+        return { Keys.SUCCESS : 1, Keys.SEARCH_KEY : entity.key.urlsafe() }
 
 
 class StopMeetupSearchHandler(ApiHandler):
     def handle(self):
-        meetup_key = self.getParam(Keys.MEETUP_KEY)
-        meetup = ndb.Key(urlsafe=meetup_key).get()
-        meetup.search_entity.delete()
+        search_entity_key = self.getParam(Keys.SEARCH_KEY)
+        search_entity = ndb.Key(urlsafe=search_entity_key).delete()
 
         return { Keys.SUCCESS : 1 }
 
 
 class UpdateMeetupSearchHandler(ApiHandler):
     def handle(self):
-        meetup_key = self.getParam(Keys.MEETUP_KEY)
+        search_key = self.getParam(Keys.SEARCH_KEY)
+        latitude = self.getParam(Keys.LATITUDE)
+        longitude = self.getParam(Keys.LONGITUDE)
 
-        # Retrieve the current members of the meetup
+        willing_matches = self.getParam(Keys.WILLING_MATCHES)
 
-        return { Keys.SUCCESS : 1 }
+        # Retrieve the meetup of the user
+        search_entity = ndb.Key(urlsafe=search_key).get()
+        meetup = search_entity.meetup.get()
+
+        # Set the people 
+        search_entity.willing_matches = [ndb.Key(urlsafe=x) for x in willing_matches]
+
+        MAX_MATCH_DISTANCE = 5 #km
+
+        # Retrieve all the people searching in the area
+        potential_matches = [x for x in SearchEntity.query(SearchEntity.key != search_entity.key)
+            if x.distance(search_entity) < MAX_MATCH_DISTANCE]
+
+        # 
+        formatted_matches = []
+        for match in potential_matches:
+            formatted_matches.append({
+                Keys.SEARCH_KEY : match.key.urlsafe(),
+                Keys.DISTANCE : match.distance(search_entity),
+                Keys.USERNAME : [x.get().username for x in match.meetup.get().current_users],
+                Keys.WILLING_MATCHES : search_entity.key in match.willing_matches
+            })
+
+        return { 
+            Keys.SUCCESS : 1,
+            Keys.MATCHES : formatted_matches
+        }
 
 class LeaveMeetup(ApiHandler):
     def handle(self):

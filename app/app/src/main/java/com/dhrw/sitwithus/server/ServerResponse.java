@@ -4,14 +4,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
-import com.dhrw.sitwithus.data.Profile;
+import com.dhrw.sitwithus.data.SearchMeetup;
+import com.dhrw.sitwithus.data.UserProfile;
 import com.dhrw.sitwithus.util.Keys;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,8 +62,8 @@ public class ServerResponse {
         return BitmapFactory.decodeByteArray(pictureBytes, 0, pictureBytes.length, options);
     }
 
-    public List<Profile> getProfileArray(String name) {
-        ArrayList<Profile> result = new ArrayList<>();
+    public List<UserProfile> getProfileArray(String name) {
+        ArrayList<UserProfile> result = new ArrayList<>();
         try {
             JSONArray a = response.getJSONArray(name);
             for (int i = 0; i < a.length(); i++) {
@@ -72,13 +72,41 @@ public class ServerResponse {
                 Bitmap image = profileObject.has(Keys.PICTURE) ?
                         stringToImage(profileObject.getString(Keys.PICTURE)) : null;
 
-                Profile profile = new Profile(profileObject.getString(Keys.USERNAME),
+                UserProfile profile = new UserProfile(profileObject.getString(Keys.USERNAME),
                         profileObject.getString(Keys.FIRST_NAME),
                         profileObject.getString(Keys.LAST_NAME),
                         profileObject.getString(Keys.BIO),
                         image);
 
                 result.add(profile);
+            }
+            return result;
+        } catch (JSONException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    public List<SearchMeetup> getSearchMeetupArray(String name) {
+        ArrayList<SearchMeetup> result = new ArrayList<>();
+        try {
+            JSONArray a = response.getJSONArray(name);
+            for (int i = 0; i < a.length(); i++) {
+                JSONObject meetupObject = a.getJSONObject(i);
+
+                // Retrieve the usernames of the users in the meetup
+                ArrayList<String> usernames = new ArrayList<>();
+                JSONArray jsonUsernames = meetupObject.getJSONArray(Keys.USERNAME);
+                for (int j = 0; j < jsonUsernames.length(); j++) {
+                    usernames.add(jsonUsernames.getString(j));
+                }
+
+                //
+                SearchMeetup meetup = new SearchMeetup(
+                        meetupObject.getString(Keys.SEARCH_KEY), usernames,
+                        meetupObject.getDouble(Keys.DISTANCE),
+                        meetupObject.getBoolean(Keys.WILLING_MATCHES));
+
+                result.add(meetup);
             }
             return result;
         } catch (JSONException e) {

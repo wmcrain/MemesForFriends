@@ -35,8 +35,7 @@ public class MeetupSearchPendingActivity extends Activity {
         unmatched.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(MeetupSearchPendingActivity.this, MeetupSearchActivity.class);
-                startActivityForResult(myIntent, 0);
+                finish();
             }
         });
 

@@ -56,10 +56,6 @@
         </activity>
 
 
-        <service android:name=".MeetupSearchService">
-        </service>
-
-
     </application>
 
 </manifest>

@@ -2,9 +2,7 @@ package com.dhrw.sitwithus.data;
 
 import android.graphics.Bitmap;
 
-import com.dhrw.sitwithus.R;
-
-public class MeetupStub {
+public class UserProfile {
 
     public String username;
     public String firstName;
@@ -13,16 +11,13 @@ public class MeetupStub {
 
     public Bitmap picture;
 
-    public double GPS;
-    //public string searchkey;
-
-    public MeetupStub(String username, String firstName, String lastName, String bio, double GPS) {
+    public UserProfile(String username, String firstName, String lastName, String bio,
+            Bitmap picture) {
 
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.bio = bio;
-        this.GPS = GPS;
-        this.picture = null;
+        this.picture = picture;
     }
 }

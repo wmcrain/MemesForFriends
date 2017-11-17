@@ -20,14 +20,11 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.dhrw.sitwithus.data.Profile;
+import com.dhrw.sitwithus.data.UserProfile;
 import com.dhrw.sitwithus.server.ServerRequest;
 import com.dhrw.sitwithus.server.ServerResponse;
 import com.dhrw.sitwithus.util.Keys;
 import com.dhrw.sitwithus.util.Preferences;
-
-import java.io.File;
-import java.net.URI;
 
 
 public class EditProfileActivity extends Activity{
@@ -118,7 +115,7 @@ public class EditProfileActivity extends Activity{
             public void onSuccess(int responseCode, ServerResponse responseMessage) {
                 super.onSuccess(responseCode, responseMessage);
 
-                Profile profile = responseMessage.getProfileArray(Keys.PROFILE).get(0);
+                UserProfile profile = responseMessage.getProfileArray(Keys.PROFILE).get(0);
 
                 nameView.setText(profile.firstName+ " " + profile.lastName);
 

@@ -144,9 +144,9 @@ class Meetup(ndb.Model):
     current_users = ndb.KeyProperty(kind='User', indexed=False, repeated=True)
     previous_users = ndb.KeyProperty(kind='User', indexed=False, repeated=True)
 
-    search_entity = ndb.KeyProperty(kind='SearchEntity', indexed=False, default=None)
-
 class SearchEntity(ndb.Model):
+    meetup = ndb.KeyProperty(kind='Meetup', indexed=False, default=None)
+
     latitude = ndb.FloatProperty(required=True)
     longitude = ndb.FloatProperty(required=True)
 
