@@ -17,7 +17,7 @@
         android:id="@+id/profileMatchEntry"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_weight=".6"
+        android:layout_weight=".55"
         android:clickable="true"
         android:ems="10"
         android:focusable="false"
@@ -27,7 +27,7 @@
         android:id="@+id/distanceMatchEntry"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_weight=".1"
+        android:layout_weight=".15"
         android:ems="10"
         android:inputType="text" />
 
