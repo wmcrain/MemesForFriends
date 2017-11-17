@@ -1,37 +1,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="50dp"
-    android:orientation="horizontal"  android:weightSum="1">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/friend_entry_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
-        <ImageView
-            android:id="@+id/match_entry_picture"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".15"
-            android:gravity="center"
-            android:src="@mipmap/david" />
+    <ImageView
+        android:id="@+id/match_entry_picture"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight=".15"
+        android:gravity="center"/>
 
-        <TextView
-            android:id="@+id/profileMatchEntry"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".6"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:clickable="true"
-            android:focusable="false"/>
+    <TextView
+        android:id="@+id/profileMatchEntry"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight=".6"
+        android:clickable="true"
+        android:ems="10"
+        android:focusable="false"
+        android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/distanceMatchEntry"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".15"
-            android:ems="10"
-            android:inputType="text" />
+    <TextView
+        android:id="@+id/distanceMatchEntry"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight=".1"
+        android:ems="10"
+        android:inputType="text" />
 
-        <Switch
-            android:id="@+id/toggleMatchEntry"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".15"
-            android:text="" />
+    <Switch
+        android:id="@+id/toggleMatchEntry"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight=".15"
+        android:text=""/>
 </LinearLayout>

@@ -57,10 +57,11 @@ public class MeetupSearchActivity extends Activity {
             }
 
             TextView GPS = (TextView) view.findViewById(R.id.distanceMatchEntry);
-            String q = String.valueOf(searchMeetup.distance);
+            String q = String.valueOf(searchMeetup.distance) + " km";
             GPS.setText(q);
 
             name.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View view) {
                     Intent viewProfile = new Intent(MeetupSearchActivity.this,
