@@ -23,7 +23,7 @@ public class UserContactDevs extends Activity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(UserContactDevs.this, AccountManageActivity.class);
+                Intent myIntent = new Intent(UserContactDevs.this, MainActivity.class);
                 startActivityForResult(myIntent, 0);
             }
         });
