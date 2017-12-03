@@ -160,6 +160,9 @@ public class MeetupSearchActivity extends Activity {
 
         //Potentially need a Boolean flag if using one screen and repopulating the ListView
         //When a button is clicked, check the state of the flag, set colors as necessary
+        //keep track of two lists for the list adapter
+        //flip flags on button presses to signify which list we're looking at
+        //easier than repopulating a single list repeatedly
         Button stopSearch = (Button) findViewById(R.id.stopSearch);
         stopSearch.setOnClickListener(new View.OnClickListener() {
             @Override
