@@ -13,10 +13,10 @@
             android:id="@+id/headerManage"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:ems="16"
+            android:ems="10"
             android:gravity="center"
             android:inputType="none"
-            android:text="ACCOUNT MANAGEMENT"
+            android:text="Account Management"
             android:layout_weight=".1"
             android:textColor="@color/white"/>
 

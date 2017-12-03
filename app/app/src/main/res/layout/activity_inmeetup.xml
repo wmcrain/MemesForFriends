@@ -17,8 +17,8 @@
                 android:inputType="none"
                 android:text="MEETUP" />
 
-
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -31,6 +31,7 @@
             </ListView>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
