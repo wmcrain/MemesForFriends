@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color
+        name="black"
+        >#000000</color>
+    <color
+        name="royal_blue"
+        >#4169e1</color>
+    <color
+        name="dodger_blue"
+        >#1e90ff</color>
+    <color
+        name="medium_blue"
+        >#0000cd</color>
+    <color
+        name="white"
+        >#ffffff</color>
+</resources>
