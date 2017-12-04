@@ -2,6 +2,14 @@ package com.dhrw.sitwithus;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -53,9 +61,10 @@ public class MeetupSearchActivity extends Activity {
 
             ImageView pic = (ImageView) view.findViewById(R.id.match_entry_picture);
             if (profile.picture != null) {
-                pic.setImageBitmap(profile.picture);
+                pic.setImageBitmap(getRoundedCornerBitmap(profile.picture, (int) (profile.picture.getWidth() * .7)));
             } else {
-                pic.setImageResource(R.mipmap.david);
+                Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.david);
+                pic.setImageBitmap(getRoundedCornerBitmap(bm, (int) (bm.getWidth() * .7)));
             }
 
             TextView GPS = (TextView) view.findViewById(R.id.distanceMatchEntry);
@@ -72,14 +81,22 @@ public class MeetupSearchActivity extends Activity {
                     startActivity(viewProfile);
                 }
             });
+            //need to check state of a match to set toggleMatched to the proper state
+            //based on if a user has previously matched with them during this session
+            //check match status when this switch is toggled
 
-          /*Switch toggleMatched = (Switch) view.findViewById(R.id.toggleMatchEntry);
+            //when both people toggle the switch on the "matched" ListView, they will be immediately
+            //pushed into a group
+
+            /*Switch toggleMatched = (Switch) view.findViewById(R.id.toggleMatchEntry);
             toggleMatched.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    //move user out of current listview
-                    //place user in "pending" listview
+                    //if other user has matched with user, push other user to matched ListView
+                    //matching proceeds from there
+                    //if other user hasn't matched with user, save that this user has matched
+                    //so other user can check match status
                     //either queue to notify server that user has matched, or immediately push that user
                     //has toggled a match
                 }
@@ -114,6 +131,7 @@ public class MeetupSearchActivity extends Activity {
                 searchMeetups = nearbyMeetups;
 
                 // Retrieve a list of all the user names for which the profile has not been retrieved
+
                 ArrayList<String> newUsernames = new ArrayList<>();
                 for (SearchMeetup searchMeetup : nearbyMeetups) {
                     for (String username : searchMeetup.usernames) {
@@ -145,6 +163,17 @@ public class MeetupSearchActivity extends Activity {
         searcher.start();
         listView.setAdapter(adapter);
 
+        //initialize the proper buttons to the proper colors
+        //depending on which screen you're on
+        //Green for on that screen, gray for not on the screen?
+        //Initialize unmatched to green
+        //Initialize matched to gray
+
+        //Potentially need a Boolean flag if using one screen and repopulating the ListView
+        //When a button is clicked, check the state of the flag, set colors as necessary
+        //keep track of two lists for the list adapter
+        //flip flags on button presses to signify which list we're looking at
+        //easier than repopulating a single list repeatedly
         Button stopSearch = (Button) findViewById(R.id.stopSearch);
         stopSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,8 +202,29 @@ public class MeetupSearchActivity extends Activity {
             }
         });
 
-        //code for swiping needs to be added
-        //code for swapping between already swiped users and to be swiped users needs to be added
+        //code for swiping needs to be added, might replace swiping with toggle
+        //code for swapping between already toggled users and to be toggled users
 
+    }
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
+                .getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+        final float roundPx = pixels;
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
     }
 }

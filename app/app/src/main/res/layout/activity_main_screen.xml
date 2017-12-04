@@ -1,51 +1,62 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingRight="@dimen/activity_horizontal_margin"
+    android:layout_height="match_parent"
+    android:layout_weight = "1"
+    android:orientation="vertical"
+    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
-    <LinearLayout
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
+    <TextView
+        android:id="@+id/headerManage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="none"
+        android:text="SIT WITH US"
+        android:layout_weight=".1"/>
+    <Button
+        android:id="@+id/meetupsMain"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".2"
+        android:text="Meetups" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".033"/>
+    <Button
+        android:id="@+id/accmanageMain"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".2"
+        android:text="Account Management" />
 
-        <Button
-            android:id="@+id/meetupsMain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Meetups" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".033"/>
 
-        <Button
-            android:id="@+id/accmanageMain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Account Management" />
+    <Button
+        android:id="@+id/contactdevsMain"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".2"
+        android:text="Contact Developers" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".033"/>
 
-            <Button
-                android:id="@+id/logoutMain"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Log Out" />
-            <View
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-            />
+    <Button
+        android:id="@+id/logoutMain"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".2"
+        android:text="Log Out" />
 
-            <Button
-                android:id="@+id/contactdevsMain"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Contact Developers" />
-        </LinearLayout>
-    </LinearLayout>
-
-
-</RelativeLayout>
+</LinearLayout>

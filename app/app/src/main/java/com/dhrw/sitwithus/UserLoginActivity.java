@@ -34,19 +34,27 @@ public class UserLoginActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
             final View rootView=inflater.inflate(R.layout.fragment_login_popup, container, false);
             final TextView instructions = (TextView) rootView.findViewById(R.id.loginPopupText);
+            final TextView deviceNumber = (TextView) rootView.findViewById(R.id.loginDeviceCode);
+            final TextView bottomInstructions = (TextView) rootView.findViewById(R.id.loginPopupBottom);
             final String address = getArguments().getString("address");
             final String code = getArguments().getString("code");
             final boolean registered = getArguments().getBoolean("registered");
             final String display;
+            final String bottom;
 
             if(registered){
-                display = "An email has been sent to " + address + " with device code " + code + ". To login, click the link provided.";
+                display = "An email has been sent to " + address + " with device code: ";
+                bottom = "To login, click the link provided.";
             }
             else{
-                display = "An email has been sent to " + address + " with device code " + code + ". To complete registration, click the link provided.";
+                display = "An email has been sent to " + address + " with device code: ";
+                bottom = "To complete registration, click the link provided.";
             }
 
             instructions.setText(display);
+            deviceNumber.setText(code);
+            bottomInstructions.setText(bottom);
+
 
             Button cancel = (Button) rootView.findViewById(R.id.loginPopupCancel);
             cancel.setOnClickListener(new View.OnClickListener() {

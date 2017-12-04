@@ -29,6 +29,9 @@ public class UserContactDevs extends Activity {
         });
 
     }
+
+    //need a popup upon submission to show that your feedback was successful
+    //this popup does not work.
 /*
     public void onButtonShowPopup(View view) {
         LinearLayout mainlayout = (LinearLayout) findViewById(R.layout.activity_contact_devs);
