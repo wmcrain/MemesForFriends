@@ -3,6 +3,7 @@ package com.dhrw.sitwithus;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -53,7 +54,8 @@ public class FriendListActivity extends Activity {
             if (profile.picture != null) {
                 pic.setImageBitmap(getRoundedCornerBitmap(profile.picture, (int) (profile.picture.getWidth() * .7)));
             } else {
-                pic.setImageResource(R.mipmap.david);
+                Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.david);
+                pic.setImageBitmap(getRoundedCornerBitmap(bm, (int) (bm.getWidth() * .7)));
             }
 
             view.setOnClickListener(new View.OnClickListener() {
