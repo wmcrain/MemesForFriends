@@ -34,6 +34,10 @@ class Keys():
     DISTANCE = "distance"
     WILLING_MATCHES = "willing_matches"
     MATCHES = "matches"
+    CONFIRMED = "confirmed"
+    TIME_FORMED = "time_formed"
+    HISTORY = "history"
+    PENDING_MATCH = "pending_match"
 
 
 class Links():

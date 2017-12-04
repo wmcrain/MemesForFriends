@@ -28,8 +28,10 @@ import java.util.List;
 
 public class MeetupSearchActivity extends Activity {
 
-    LinkedHashMap<String, UserProfile> usernameProfiles;
-    List<SearchMeetup> searchMeetups;
+    private LinkedHashMap<String, UserProfile> usernameProfiles;
+
+    // The list
+    private List<SearchMeetup> searchMeetups;
 
     private MeetupSearcher searcher;
 

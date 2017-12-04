@@ -19,8 +19,10 @@ app = webapp2.WSGIApplication([
     ('/login/ping', handle_user_account.LoginPingHandler),
     ('/profile/get', handle_user_profile.GetProfileHandler),
     ('/profile/set', handle_user_profile.SetProfileHandler),
+    ('/meetup/history', handle_meetups.MeetupHistoryHandler),
     ('/meetup/search/start', handle_meetups.StartMeetupSearchHandler),
     ('/meetup/search/stop', handle_meetups.StopMeetupSearchHandler),
     ('/meetup/search/update', handle_meetups.UpdateMeetupSearchHandler),
+    ('/meetup/confirm', handle_meetups.ConfirmMeetupMatchHandler),
     ('/friends/get', handle_user_profile.GetFriendsHandler),
 ], debug=True)

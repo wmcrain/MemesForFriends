@@ -151,7 +151,16 @@ class SearchEntity(ndb.Model):
     longitude = ndb.FloatProperty(required=True)
 
     willing_matches = ndb.KeyProperty(kind='Meetup', repeated=True)
-    confirmed_matches = ndb.KeyProperty(kind='Meetup', repeated=True)
+
+    pending_match = ndb.KeyProperty(kind='SearchEntity')
+    pending_match_status = ndb.StringProperty(required=True)
+
+    class Status():
+        """ The enumeration of keys that map to values in JSON request and responses. """
+        APPROVED = "approved"
+        CONFIRMED = "confirmed"
+        DENIED = "denied"
+        PENDING = "pending"
 
     def distance(self, other):
         earth_radius = 6371 # The radius of earth in kilometers
