@@ -18,8 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.dhrw.sitwithus.data.UserProfile;
@@ -30,7 +32,6 @@ import com.dhrw.sitwithus.util.Keys;
 import com.dhrw.sitwithus.util.Preferences;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -88,20 +89,16 @@ public class MeetupSearchActivity extends Activity {
             //when both people toggle the switch on the "matched" ListView, they will be immediately
             //pushed into a group
 
-            /*Switch toggleMatched = (Switch) view.findViewById(R.id.toggleMatchEntry);
+            // Have the toggle communicate with the searching thread to communicate which meetups
+            // the user is willing to meet with
+            Switch toggleMatched = (Switch) view.findViewById(R.id.toggleMatchEntry);
             toggleMatched.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    //if other user has matched with user, push other user to matched ListView
-                    //matching proceeds from there
-                    //if other user hasn't matched with user, save that this user has matched
-                    //so other user can check match status
-                    //either queue to notify server that user has matched, or immediately push that user
-                    //has toggled a match
+                    searcher.setWilling(searchMeetup, isChecked);
                 }
+            });
 
-            });*/
             return view;
         }
 
@@ -110,13 +107,11 @@ public class MeetupSearchActivity extends Activity {
             return searchMeetups.size();
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meetup_search);
-        //push the user that called this to the server
-        //run a constant thread that updates every ~60s that pushes new user information
-        //pull users from database that are located within certain area of the user
 
         usernameProfiles = new LinkedHashMap<>();
         searchMeetups = new ArrayList<>();
@@ -124,14 +119,14 @@ public class MeetupSearchActivity extends Activity {
         final ListView listView = (ListView) findViewById(R.id.usersSearch);
         final UserSearchAdapter adapter = new UserSearchAdapter();
 
-        //
+        // Create the meetup searcher thread that pulls search results periodically from the server
         searcher = new MeetupSearcher(Preferences.getUserKey(this)) {
+
             @Override
             public void onResultUpdate(List<SearchMeetup> nearbyMeetups) {
                 searchMeetups = nearbyMeetups;
 
-                // Retrieve a list of all the user names for which the profile has not been retrieved
-
+                // Retrieve a list of all the usernames for which the profile has not been cached
                 ArrayList<String> newUsernames = new ArrayList<>();
                 for (SearchMeetup searchMeetup : nearbyMeetups) {
                     for (String username : searchMeetup.usernames) {
@@ -141,22 +136,47 @@ public class MeetupSearchActivity extends Activity {
                     }
                 }
 
-                ServerRequest getProfiles = ServerRequest.createGetProfileRequest(
-                        Preferences.getUserKey(MeetupSearchActivity.this), newUsernames);
+                if (newUsernames.size() == 0) {
+                    // Update the list view now if all the profiles are already cached
+                    adapter.notifyDataSetChanged();
 
-                getProfiles.sendRequest(new ServerRequest.Callback() {
-                    @Override
-                    public void onSuccess(int responseCode, ServerResponse responseMessage) {
-                        super.onSuccess(responseCode, responseMessage);
+                } else {
+                    // Retrieve the profiles of the users whose profiles have not been cached
+                    ServerRequest getProfiles = ServerRequest.createGetProfileRequest(
+                            Preferences.getUserKey(MeetupSearchActivity.this),
+                            newUsernames);
 
-                        for (UserProfile profile : responseMessage.getProfileArray(Keys.PROFILE)) {
-                            usernameProfiles.put(profile.username, profile);
+                    getProfiles.sendRequest(new ServerRequest.Callback() {
+                        @Override
+                        public void onSuccess(int responseCode, ServerResponse responseMessage) {
+                            super.onSuccess(responseCode, responseMessage);
+
+                            // Add the profiles to the cache
+                            for (UserProfile profile : responseMessage.getProfileArray(Keys.PROFILE)) {
+                                usernameProfiles.put(profile.username, profile);
+                            }
+
+                            // Update the list view
+                            adapter.notifyDataSetChanged();
                         }
+                    });
+                }
+            }
 
-                        //
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+            @Override
+            public void onConfirmedMatch(String meetupKey) {
+
+            }
+
+            @Override
+            public void onDeclinePendingMatch() {
+
+            }
+
+            @Override
+            public void onPendingMatch(String otherSearchKey,
+                    MeetupSearcher.PendingMatchConfirmer confirmer) {
+
             }
         };
 

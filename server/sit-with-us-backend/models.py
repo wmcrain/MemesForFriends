@@ -150,10 +150,10 @@ class SearchEntity(ndb.Model):
     latitude = ndb.FloatProperty(required=True)
     longitude = ndb.FloatProperty(required=True)
 
-    willing_matches = ndb.KeyProperty(kind='Meetup', repeated=True)
+    willing_matches = ndb.KeyProperty(kind='SearchEntity', repeated=True)
 
     pending_match = ndb.KeyProperty(kind='SearchEntity')
-    pending_match_status = ndb.StringProperty(required=True)
+    pending_match_status = ndb.StringProperty()
 
     class Status():
         """ The enumeration of keys that map to values in JSON request and responses. """

@@ -19,4 +19,7 @@ public class Keys {
     public static final String WILLING_MATCHES = "willing_matches";
     public static final String DISTANCE = "distance";
     public static final String MATCHES = "matches";
+    public static final String CONFIRMED = "confirmed";
+    public static final String MEETUP_KEY = "meetup_key";
+    public static final String PENDING_MATCH = "pending_match";
 }

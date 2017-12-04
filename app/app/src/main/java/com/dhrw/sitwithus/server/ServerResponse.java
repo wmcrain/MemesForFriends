@@ -103,8 +103,7 @@ public class ServerResponse {
                 //
                 SearchMeetup meetup = new SearchMeetup(
                         meetupObject.getString(Keys.SEARCH_KEY), usernames,
-                        meetupObject.getDouble(Keys.DISTANCE),
-                        meetupObject.getBoolean(Keys.WILLING_MATCHES));
+                        meetupObject.getDouble(Keys.DISTANCE));
 
                 result.add(meetup);
             }

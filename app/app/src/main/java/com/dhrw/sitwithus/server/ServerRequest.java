@@ -355,7 +355,7 @@ public class ServerRequest {
     }
 
     public static ServerRequest creaateUpdateSearchRequest(String searchKey,
-            float latitude, float longitude, ArrayList<String> willingSearchKeys) {
+            float latitude, float longitude, List<String> willingSearchKeys) {
 
         try {
             JSONObject data = new JSONObject();

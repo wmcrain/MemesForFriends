@@ -17,7 +17,7 @@ class StartMeetupSearchHandler(ApiHandler):
 
         # If the user is not in a meetup, place them in one
         meetup = None
-        if user.current_meetup is None:
+        if user.current_meetup is None or user.current_meetup.get() is None:
             # Add the user as a current user in the meetup
             meetup = Meetup(current_users=[user.key])
             meetup.put()
@@ -37,7 +37,7 @@ class StartMeetupSearchHandler(ApiHandler):
 class StopMeetupSearchHandler(ApiHandler):
     def handle(self):
         search_entity_key = self.getParam(Keys.SEARCH_KEY)
-        search_entity = ndb.Key(urlsafe=search_entity_key).delete()
+        search_entity = ndb.Key(urlsafe=search_entity_key).get().key.delete()
 
         return { Keys.SUCCESS : 1 }
 
@@ -106,7 +106,7 @@ class UpdateMeetupSearchHandler(ApiHandler):
 
         # Add the pending match search entity key to the result if a match is currently pending
         if search_entity.pending_match is not None:
-            result.update({ Keys.PENDING_MATCH : search_entity.pending_match.key.urlsafe()})
+            result.update({ Keys.PENDING_MATCH : search_entity.pending_match.urlsafe()})
 
         return result
 
