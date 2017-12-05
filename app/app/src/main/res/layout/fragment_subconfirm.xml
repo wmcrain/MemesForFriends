@@ -23,5 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/subconfirmPopup"
         android:layout_centerHorizontal="true"
-        android:text="ok" />
+        android:text="ok"
+        android:background="@drawable/confirmed_button"/>
 </RelativeLayout>

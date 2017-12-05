@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
     }
 
     public void attemptLogout(){
-        new AlertDialog.Builder(this)
+        new AlertDialog.Builder(this)   //can't figure out how to make this text black
                 .setMessage("Are you sure you want to log out?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
