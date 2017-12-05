@@ -36,25 +36,33 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight=".1">
+
+            <Button
+                android:id="@+id/inmeetupLeave"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".2"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="none"
+                android:text="EXIT"
+                android:background="@drawable/stop_button"/>
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".15"/>
 
             <Button
-                android:id="@+id/leavemeetupInMeetup"
+                android:id="@+id/inmeetupSearch"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".7"
+                android:layout_weight=".4"
                 android:ems="10"
                 android:gravity="center"
                 android:inputType="none"
-                android:text="LEAVE MEETUP" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".15"/>
+                android:text="SEARCH"
+                android:background="@drawable/confirmed_button"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
