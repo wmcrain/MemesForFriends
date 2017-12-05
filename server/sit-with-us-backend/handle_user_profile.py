@@ -68,3 +68,15 @@ class ToggleFriendHandler(ApiHandler):
         
         return { Keys.SUCCESS : 1 }
 
+class GetBlockHandler(ApiHandler):
+    def handle(self):
+        user_key = self.getParam(Keys.USER_KEY)
+        
+
+class ToggleBlockHandler(ApiHandler):
+    def handle(self):
+        user_key = self.getParam(Keys.USER_KEY)
+        block_user_key = self.getParam(Keys.BLOCKED)
+        
+        return { Keys.SUCCESS : 1 }
+

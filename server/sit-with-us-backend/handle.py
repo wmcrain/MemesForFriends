@@ -38,6 +38,7 @@ class Keys():
     TIME_FORMED = "time_formed"
     HISTORY = "history"
     PENDING_MATCH = "pending_match"
+    BLOCKED = "bloocked"
 
 
 class Links():

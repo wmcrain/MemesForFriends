@@ -35,16 +35,16 @@ public class BlockListActivity extends Activity {
             final UserProfile profile = blocked.get(position);
 
             View view = LayoutInflater.from(BlockListActivity.this).inflate(R.layout.activity_block_entry, null);
-            TextView name = (TextView) findViewById(R.id.block_entry_name);
+            TextView name = (TextView) findViewById(R.id.blockEntryName);
             name.setText(profile.firstName + " " + profile.lastName);
 
-            ImageView pic = (ImageView) findViewById(R.id.block_entry_picture);
+            ImageView pic = (ImageView) findViewById(R.id.blockEntryPic);
             if (profile.picture != null)
                 pic.setImageBitmap(profile.picture);
             else
                 pic.setImageResource(R.mipmap.david);
 
-            Button delete = (Button) findViewById(R.id.block_list_remove_btn);
+            Button delete = (Button) findViewById(R.id.blockEntryRemove);
 
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override

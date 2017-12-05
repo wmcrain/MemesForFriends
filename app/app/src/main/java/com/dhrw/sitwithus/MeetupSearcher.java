@@ -26,9 +26,9 @@ public abstract class MeetupSearcher {
             try {
                 while (state == MeetupSearcher.State.RUNNING) {
 
-                    // Send the request to receive updated search data and call the onResultUpdate
-                    // method when the request succeeds
                     synchronized (lock) {
+                        // Send the request to receive updated search data and call the
+                        // onResultUpdate method when the request succeeds
                         ServerRequest updateRequest = ServerRequest.creaateUpdateSearchRequest(
                                 searchKey, 40.0f, 40.0f, willingMatches);
 
