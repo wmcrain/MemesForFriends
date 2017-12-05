@@ -67,10 +67,26 @@ class ToggleFriendHandler(ApiHandler):
     def handle(self):
         
         return { Keys.SUCCESS : 1 }
+        
 
-class GetBlockHandler(ApiHandler):
+class GetBlockListHandler(ApiHandler):
     def handle(self):
         user_key = self.getParam(Keys.USER_KEY)
+        user = ndb.Key(urlsafe=user_key).get()
+
+        # Add the the usernames and keys of the blocked users to the results
+        blocked_users = []
+        for blocked_user_key in user.blocked:
+            blocked_user = blocked_user_key.get()
+            blocked_users.append({
+                Keys.USER_KEY : blocked_user_key.urlsafe(),
+                Keys.USERNAME : blocked_user.username
+            })
+
+        return {
+            Keys.SUCCESS : 1, 
+            Keys.BLOCKED : blocked_users,
+        }
         
 
 class ToggleBlockHandler(ApiHandler):

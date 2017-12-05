@@ -27,6 +27,8 @@ class User(ndb.Model):
 
     # 
     friends = ndb.KeyProperty(kind='User', indexed=False, repeated=True)
+    pending_friends = ndb.KeyProperty(kind='User', indexed=False, repeated=True)
+    
     blocked = ndb.KeyProperty(kind='User', indexed=False, repeated=True)
 
     current_meetup = ndb.KeyProperty(kind='Meetup', indexed=False, default=None)
