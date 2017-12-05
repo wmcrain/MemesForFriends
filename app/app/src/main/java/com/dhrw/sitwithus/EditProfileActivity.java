@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.dhrw.sitwithus.data.UserProfile;
+import com.dhrw.sitwithus.server.UserProfileData;
 import com.dhrw.sitwithus.server.ServerRequest;
 import com.dhrw.sitwithus.server.ServerResponse;
 import com.dhrw.sitwithus.util.Keys;
@@ -115,7 +115,7 @@ public class EditProfileActivity extends Activity{
             public void onSuccess(int responseCode, ServerResponse responseMessage) {
                 super.onSuccess(responseCode, responseMessage);
 
-                UserProfile profile = responseMessage.getProfileArray(Keys.PROFILE).get(0);
+                UserProfileData profile = responseMessage.getProfileArray(Keys.PROFILE).get(0);
 
                 nameView.setText(profile.firstName+ " " + profile.lastName);
 

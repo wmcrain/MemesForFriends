@@ -3,7 +3,6 @@ package com.dhrw.sitwithus.server;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
-import android.util.Base64;
 import android.util.Log;
 
 import com.dhrw.sitwithus.util.Keys;
@@ -13,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -44,6 +42,9 @@ public class ServerRequest {
     private static final String DIR_PROFILE_GET = "profile/get";
     private static final String DIR_PROFILE_SET = "profile/set";
     private static final String DIR_FRIENDS_GET = "friends/get";
+    private static final String DIR_PROFILE_BLOCK_GET = "profile/block/get";
+    private static final String DIR_PROFILE_BLOCK_ADD = "profile/block/add";
+    private static final String DIR_PROFILE_BLOCK_REMOVE = "profile/block/remove";
     private static final String DIR_SEARCH_START = "meetup/search/start";
     private static final String DIR_SEARCH_STOP = "meetup/search/stop";
     private static final String DIR_SEARCH_UPDATE = "meetup/search/update";
@@ -274,14 +275,7 @@ public class ServerRequest {
 
             // Add the new profile picture if it was provided
             if (picture != null) {
-                float aspect = picture.getWidth() / picture.getHeight();
-                picture = Bitmap.createScaledBitmap(picture, (int) (200 * aspect), (int) (200 / aspect), true);
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
-                // Put the UTF-8 string representation of the bytes of the file in the request data
-                data.put(Keys.PICTURE, Base64.encodeToString(stream.toByteArray(), Base64.URL_SAFE));
+                data.put(Keys.PICTURE, EncodedBitmap.toString(picture));
             }
 
             return new ServerRequest(DIR_PROFILE_SET, data);
@@ -376,4 +370,38 @@ public class ServerRequest {
         }
     }
 
+    public static ServerRequest createGetBlockListRequest(String userKey) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
+            return new ServerRequest(DIR_PROFILE_BLOCK_GET, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
+    public static ServerRequest createBlockRequest(String userKey, String otherUserKey) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
+            data.put(Keys.BLOCKED, otherUserKey);
+            return new ServerRequest(DIR_PROFILE_BLOCK_ADD, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
+    public static ServerRequest createUnblockRequest(String userKey, String otherUserKey) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
+            data.put(Keys.BLOCKED, otherUserKey);
+            return new ServerRequest(DIR_PROFILE_BLOCK_REMOVE, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
 }

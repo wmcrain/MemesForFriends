@@ -24,8 +24,8 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.dhrw.sitwithus.data.UserProfile;
-import com.dhrw.sitwithus.data.SearchMeetup;
+import com.dhrw.sitwithus.server.UserProfileData;
+import com.dhrw.sitwithus.server.SearchMeetupData;
 import com.dhrw.sitwithus.server.ServerRequest;
 import com.dhrw.sitwithus.server.ServerResponse;
 import com.dhrw.sitwithus.util.Keys;
@@ -37,10 +37,10 @@ import java.util.List;
 
 public class MeetupSearchActivity extends Activity {
 
-    private LinkedHashMap<String, UserProfile> usernameProfiles;
+    private LinkedHashMap<String, UserProfileData> usernameProfiles;
 
     // The list
-    private List<SearchMeetup> searchMeetups;
+    private List<SearchMeetupData> searchMeetups;
 
     private MeetupSearcher searcher;
 
@@ -53,8 +53,8 @@ public class MeetupSearchActivity extends Activity {
         @NonNull
         @Override
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            final SearchMeetup searchMeetup = searchMeetups.get(position);
-            final UserProfile profile = usernameProfiles.get(searchMeetup.usernames.get(0));
+            final SearchMeetupData searchMeetup = searchMeetups.get(position);
+            final UserProfileData profile = usernameProfiles.get(searchMeetup.usernames.get(0));
 
             View view = LayoutInflater.from(MeetupSearchActivity.this).inflate(R.layout.view_match_entry, null);
             TextView name = (TextView) view.findViewById(R.id.profileMatchEntry);
@@ -123,12 +123,12 @@ public class MeetupSearchActivity extends Activity {
         searcher = new MeetupSearcher(Preferences.getUserKey(this)) {
 
             @Override
-            public void onResultUpdate(List<SearchMeetup> nearbyMeetups) {
+            public void onResultUpdate(List<SearchMeetupData> nearbyMeetups) {
                 searchMeetups = nearbyMeetups;
 
                 // Retrieve a list of all the usernames for which the profile has not been cached
                 ArrayList<String> newUsernames = new ArrayList<>();
-                for (SearchMeetup searchMeetup : nearbyMeetups) {
+                for (SearchMeetupData searchMeetup : nearbyMeetups) {
                     for (String username : searchMeetup.usernames) {
                         if (!usernameProfiles.containsKey(username)) {
                             newUsernames.add(username);
@@ -152,7 +152,7 @@ public class MeetupSearchActivity extends Activity {
                             super.onSuccess(responseCode, responseMessage);
 
                             // Add the profiles to the cache
-                            for (UserProfile profile : responseMessage.getProfileArray(Keys.PROFILE)) {
+                            for (UserProfileData profile : responseMessage.getProfileArray(Keys.PROFILE)) {
                                 usernameProfiles.put(profile.username, profile);
                             }
 

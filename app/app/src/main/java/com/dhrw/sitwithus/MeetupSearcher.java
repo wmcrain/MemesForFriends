@@ -2,7 +2,7 @@ package com.dhrw.sitwithus;
 
 import android.util.Log;
 
-import com.dhrw.sitwithus.data.SearchMeetup;
+import com.dhrw.sitwithus.server.SearchMeetupData;
 import com.dhrw.sitwithus.server.ServerRequest;
 import com.dhrw.sitwithus.server.ServerResponse;
 import com.dhrw.sitwithus.util.Keys;
@@ -120,7 +120,7 @@ public abstract class MeetupSearcher {
     }
 
     /** */
-    public void setWilling(SearchMeetup meetup, boolean willing) {
+    public void setWilling(SearchMeetupData meetup, boolean willing) {
         synchronized (lock) {
             if (willing) {
                 willingMatches.add(meetup.entityKey);
@@ -169,7 +169,7 @@ public abstract class MeetupSearcher {
     }
 
     /** */
-    public abstract void onResultUpdate(List<SearchMeetup> nearbyMeetups);
+    public abstract void onResultUpdate(List<SearchMeetupData> nearbyMeetups);
 
     /** */
     public abstract void onConfirmedMatch(String meetupKey);

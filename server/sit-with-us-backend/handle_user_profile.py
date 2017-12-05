@@ -23,6 +23,7 @@ class GetProfileHandler(ApiHandler):
             # Do not show the user's profile if the other user has blocked them
 
             properties = { 
+                Keys.USER_KEY : user.key.urlsafe(),
                 Keys.USERNAME : user.username,
                 Keys.FIRST_NAME : user.first_name,
                 Keys.LAST_NAME : user.last_name,
@@ -60,14 +61,14 @@ class GetFriendsHandler(ApiHandler):
 
         return { 
             Keys.SUCCESS : 1, 
-            Keys.USERNAME : [x.get().username for x in user.friends]
+            Keys.USERNAME : [x.username for x in user.query().fetch()]
         }
 
 class ToggleFriendHandler(ApiHandler):
     def handle(self):
         
         return { Keys.SUCCESS : 1 }
-        
+
 
 class GetBlockListHandler(ApiHandler):
     def handle(self):
@@ -80,7 +81,9 @@ class GetBlockListHandler(ApiHandler):
             blocked_user = blocked_user_key.get()
             blocked_users.append({
                 Keys.USER_KEY : blocked_user_key.urlsafe(),
-                Keys.USERNAME : blocked_user.username
+                Keys.USERNAME : blocked_user.username,
+                Keys.FIRST_NAME : blocked_user.first_name,
+                Keys.LAST_NAME : blocked_user.last_name
             })
 
         return {
@@ -89,10 +92,28 @@ class GetBlockListHandler(ApiHandler):
         }
         
 
-class ToggleBlockHandler(ApiHandler):
+class AddBlockHandler(ApiHandler):
     def handle(self):
-        user_key = self.getParam(Keys.USER_KEY)
-        block_user_key = self.getParam(Keys.BLOCKED)
+        user = ndb.Key(urlsafe=self.getParam(Keys.USER_KEY)).get()
+        block_user_key = ndb.Key(urlsafe=self.getParam(Keys.BLOCKED))
+
+        # Add the other user to this user's block list if the other user exists
+        if block_user_key is not None and not block_user_key in user.blocked:
+            user.blocked.append(block_user_key)
+            user.put()
+        
+        return { Keys.SUCCESS : 1 }
+
+
+class RemoveBlockHandler(ApiHandler):
+    def handle(self):
+        user = ndb.Key(urlsafe=self.getParam(Keys.USER_KEY)).get()
+        block_user_key = ndb.Key(urlsafe=self.getParam(Keys.BLOCKED))
+
+        # Add the other user to this user's block list if the other user exists
+        if block_user_key is not None and block_user_key in user.blocked:
+            user.blocked.remove(block_user_key)
+            user.put()
         
         return { Keys.SUCCESS : 1 }
 

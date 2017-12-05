@@ -4,7 +4,7 @@ import os
 import webapp2
 
 # The email from which emails will be sent to users
-AUTHORIZED_EMAIL = 'Sit With Me <ryanmitch16@gmail.com>'
+AUTHORIZED_EMAIL = 'Sit With Us <ryanmitch16@gmail.com>'
 
 # 
 DOMAIN = 'sit-with-us-backend.appspot.com'

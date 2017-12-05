@@ -1,11 +1,5 @@
 package com.dhrw.sitwithus.server;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
-
-import com.dhrw.sitwithus.data.SearchMeetup;
-import com.dhrw.sitwithus.data.UserProfile;
 import com.dhrw.sitwithus.util.Keys;
 
 import org.json.JSONArray;
@@ -55,30 +49,12 @@ public class ServerResponse {
         }
     }
 
-    private Bitmap stringToImage(String image) {
-        byte[] pictureBytes = Base64.decode(image, Base64.URL_SAFE);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inMutable = true;
-        return BitmapFactory.decodeByteArray(pictureBytes, 0, pictureBytes.length, options);
-    }
-
-    public List<UserProfile> getProfileArray(String name) {
-        ArrayList<UserProfile> result = new ArrayList<>();
+    public List<UserProfileData> getProfileArray(String name) {
+        ArrayList<UserProfileData> result = new ArrayList<>();
         try {
             JSONArray a = response.getJSONArray(name);
             for (int i = 0; i < a.length(); i++) {
-                JSONObject profileObject = a.getJSONObject(i);
-
-                Bitmap image = profileObject.has(Keys.PICTURE) ?
-                        stringToImage(profileObject.getString(Keys.PICTURE)) : null;
-
-                UserProfile profile = new UserProfile(profileObject.getString(Keys.USERNAME),
-                        profileObject.getString(Keys.FIRST_NAME),
-                        profileObject.getString(Keys.LAST_NAME),
-                        profileObject.getString(Keys.BIO),
-                        image);
-
-                result.add(profile);
+                result.add(new UserProfileData(a.getJSONObject(i)));
             }
             return result;
         } catch (JSONException e) {
@@ -86,26 +62,25 @@ public class ServerResponse {
         }
     }
 
-    public List<SearchMeetup> getSearchMeetupArray(String name) {
-        ArrayList<SearchMeetup> result = new ArrayList<>();
+    public List<SearchMeetupData> getSearchMeetupArray(String name) {
+        ArrayList<SearchMeetupData> result = new ArrayList<>();
         try {
             JSONArray a = response.getJSONArray(name);
             for (int i = 0; i < a.length(); i++) {
-                JSONObject meetupObject = a.getJSONObject(i);
+                result.add(new SearchMeetupData(a.getJSONObject(i)));
+            }
+            return result;
+        } catch (JSONException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
 
-                // Retrieve the usernames of the users in the meetup
-                ArrayList<String> usernames = new ArrayList<>();
-                JSONArray jsonUsernames = meetupObject.getJSONArray(Keys.USERNAME);
-                for (int j = 0; j < jsonUsernames.length(); j++) {
-                    usernames.add(jsonUsernames.getString(j));
-                }
-
-                //
-                SearchMeetup meetup = new SearchMeetup(
-                        meetupObject.getString(Keys.SEARCH_KEY), usernames,
-                        meetupObject.getDouble(Keys.DISTANCE));
-
-                result.add(meetup);
+    public List<BlockedUserData> getBlockedUserList(String name) {
+        ArrayList<BlockedUserData> result = new ArrayList<>();
+        try {
+            JSONArray a = response.getJSONArray(name);
+            for (int i = 0; i < a.length(); i++) {
+                result.add(new BlockedUserData(a.getJSONObject(i)));
             }
             return result;
         } catch (JSONException e) {
