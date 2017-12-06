@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -48,6 +49,10 @@ public class ServerRequest {
     private static final String DIR_SEARCH_START = "meetup/search/start";
     private static final String DIR_SEARCH_STOP = "meetup/search/stop";
     private static final String DIR_SEARCH_UPDATE = "meetup/search/update";
+    private static final String DIR_SEARCH_CONFIRM = "meetup/search/confirm";
+    private static final String DIR_MEETUP_START = "meetup/start";
+    private static final String DIR_MEETUP_LEAVE = "meetup/leave";
+    private static final String DIR_MEETUP_UPDATE = "meetup/update";
     
     /** Holds the methods that will be called when the response has arrived from the server. */
     public static abstract class Callback {
@@ -80,12 +85,12 @@ public class ServerRequest {
     }
 
     public void sendRequest() {
-        sendRequest(new Callback() { }, 5000);
+        sendRequest(new Callback() { }, 20000);
     }
 
     /** */
     public void sendRequest(final Callback callback) {
-        sendRequest(callback, 5000);
+        sendRequest(callback, 20000);
     }
 
     /** */
@@ -336,10 +341,11 @@ public class ServerRequest {
         }
     }
 
-    public static ServerRequest createStopSearchRequest(String searchKey) {
+    public static ServerRequest createStopSearchRequest(String userKey, String searchKey) {
 
         try {
             JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
             data.put(Keys.SEARCH_KEY, searchKey);
             return new ServerRequest(DIR_SEARCH_STOP, data);
 
@@ -348,11 +354,12 @@ public class ServerRequest {
         }
     }
 
-    public static ServerRequest creaateUpdateSearchRequest(String searchKey,
+    public static ServerRequest createUpdateSearchRequest(String userKey, String searchKey,
             float latitude, float longitude, List<String> willingSearchKeys) {
 
         try {
             JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
             data.put(Keys.SEARCH_KEY, searchKey);
             data.put(Keys.LATITUDE, latitude);
             data.put(Keys.LONGITUDE, longitude);
@@ -399,6 +406,51 @@ public class ServerRequest {
             data.put(Keys.USER_KEY, userKey);
             data.put(Keys.BLOCKED, otherUserKey);
             return new ServerRequest(DIR_PROFILE_BLOCK_REMOVE, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
+    public static ServerRequest createSearchConfirmMatchRequest(String searchKey, boolean approve) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.SEARCH_KEY, searchKey);
+            data.put(Keys.CONFIRMED, approve ? 1 : 0);
+            return new ServerRequest(DIR_SEARCH_CONFIRM, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
+    public static ServerRequest createStartMeetupRequest(String userKey) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
+            return new ServerRequest(DIR_MEETUP_START, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
+    public static ServerRequest createMeetupUpdateRequest(String userKey) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
+            return new ServerRequest(DIR_MEETUP_UPDATE, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
+    public static ServerRequest createLeaveMeetupRequest(String userKey) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
+            return new ServerRequest(DIR_MEETUP_LEAVE, data);
 
         } catch (JSONException e) {
             throw new IllegalArgumentException("Unable to create login ping request.");

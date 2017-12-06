@@ -40,9 +40,6 @@
         <activity android:name=".UserContactDevs">
         </activity>
 
-        <activity android:name=".UserLogoutActivity">
-        </activity>
-
         <activity android:name=".ViewMeetupHistoryActivity">
         </activity>
 
@@ -53,6 +50,9 @@
         </activity>
 
         <activity android:name=".FriendListActivity">
+        </activity>
+
+        <activity android:name=".MeetupActivity">
         </activity>
 
 

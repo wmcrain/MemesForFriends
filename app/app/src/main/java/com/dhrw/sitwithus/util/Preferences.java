@@ -23,4 +23,14 @@ public class Preferences {
         return context.getSharedPreferences("u", Context.MODE_PRIVATE)
                 .getString(Keys.USERNAME, null);
     }
+
+    public static void setMeetupKey(Context context, String key) {
+        context.getSharedPreferences("u", Context.MODE_PRIVATE).edit()
+                .putString(Keys.MEETUP_KEY, key).apply();
+    }
+
+    public static String getMeetupKey(Context context) {
+        return context.getSharedPreferences("u", Context.MODE_PRIVATE)
+                .getString(Keys.MEETUP_KEY, null);
+    }
 }

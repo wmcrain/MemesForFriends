@@ -14,7 +14,7 @@ public class SearchMeetupData {
 
     // The unique identifier of the searching meetup
     public final String entityKey;
-    public  final List<String> usernames;
+    public final List<String> usernames;
     public final double distance;
 
     SearchMeetupData(JSONObject object) throws JSONException {

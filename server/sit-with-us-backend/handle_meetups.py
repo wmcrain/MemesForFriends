@@ -8,43 +8,90 @@ from google.appengine.ext import ndb
 
 class StartMeetupSearchHandler(ApiHandler):
     def handle(self):
-        # 
         user_key = self.getParam(Keys.USER_KEY)
         latitude = self.getParam(Keys.LATITUDE)
         longitude = self.getParam(Keys.LONGITUDE)
-
         user = ndb.Key(urlsafe=user_key).get()
 
-        # If the user is not in a meetup, place them in one
-        meetup = None
-        if user.current_meetup is None or user.current_meetup.get() is None:
-            # Add the user as a current user in the meetup
-            meetup = Meetup(current_users=[user.key])
-            meetup.put()
+        entity = None
+        # Return the existing search entity for the meetup if one exists
+        search_entities = SearchEntity.query(SearchEntity.meetup == user.current_meetup).fetch()
+        if len(search_entities) > 0:
+            entity = search_entities[0]
 
-            # Specify the current meetup the user is in
-            user.current_meetup = meetup.key
-            user.put()
-        else: 
-            meetup = user.current_meetup.get()
+        # Create a new search entity for the meetup
+        else:
+            entity = SearchEntity(meetup=user.current_meetup, latitude=float(latitude), 
+                longitude=float(longitude))
+            entity.put()
 
-        entity = SearchEntity(meetup=meetup.key, latitude=float(latitude), longitude=float(longitude))
-        entity.put()
+        if not user.key in entity.searching_users:
+            entity.searching_users.append(user.key)
+            entity.put()
 
         return { Keys.SUCCESS : 1, Keys.SEARCH_KEY : entity.key.urlsafe() }
+
+def join_meetup(meetup, user_key):
+    if user_key in meetup.previous_users:
+        meetup.previous_users.remove(user_key)
+
+    if user_key not in meetup.current_users:
+        meetup.previous_users.append(user_key)
+
+    meetup.put()
+
+    user = user_key.get()
+    user.current_meetup = meetup.key
+    user.put()
+
+def leave_meetup(user_key):
+    user = user_key.get()
+
+    if not user.current_meetup is None and not user.current_meetup.get() is None:
+        meetup = user.current_meetup.get()
+
+        # Move the user to the previous users in the meetup
+        if user_key in meetup.current_users:
+            meetup.current_users.remove(user_key)
+            meetup.previous_users.append(user_key)
+            meetup.put()
+
+        # Add the meetup to the user's meetup history if there was another user in it besides the 
+        # current user
+        if len(meetup.current_users) + len(meetup.previous_users) > 1:
+            user.previous_meetups.append(meetup.key)
+        else:
+            meetup.key.delete()
+
+        # 
+        user.current_meetup = None
+        user.put()
+
+
+def remove_searching_user(search_entity, user_key):
+    # 
+    if user_key in search_entity.searching_users:
+        search_entity.searching_users.remove(user_key)
+        search_entity.put()
+
+    # Remove the meetup from matching if all users have stopped searching
+    if len(search_entity.searching_users) == 0:
+        search_entity.key.delete()
 
 
 class StopMeetupSearchHandler(ApiHandler):
     def handle(self):
-        search_entity_key = self.getParam(Keys.SEARCH_KEY)
-        search_entity = ndb.Key(urlsafe=search_entity_key).get().key.delete()
+        user_key = ndb.Key(urlsafe=self.getParam(Keys.USER_KEY))
+        search_entity = ndb.Key(urlsafe=self.getParam(Keys.SEARCH_KEY)).get()
 
+        remove_searching_user(search_entity, user_key)
         return { Keys.SUCCESS : 1 }
 
 class UpdateMeetupSearchHandler(ApiHandler):
     """
     """
     def handle(self):
+        user_key = self.getParam(Keys.USER_KEY)
         search_key = self.getParam(Keys.SEARCH_KEY)
         latitude = self.getParam(Keys.LATITUDE)
         longitude = self.getParam(Keys.LONGITUDE)
@@ -57,10 +104,10 @@ class UpdateMeetupSearchHandler(ApiHandler):
 
         # Return the new meetup key if a match was successful
         if search_entity.pending_match_status == SearchEntity.Status.CONFIRMED:
+            remove_searching_user(search_entity, user_key)
             return { 
                 Keys.SUCCESS : 1, 
-                Keys.CONFIRMED : 1, 
-                Keys.MEETUP_KEY : search_entity.meetup.urlsafe()
+                Keys.CONFIRMED : 1,
             }
 
         # TODO: Block list
@@ -136,8 +183,8 @@ class ConfirmMeetupMatchHandler(ApiHandler):
             other_entity.pending_match_status = None
 
             # Remove the users from each other's willing to match with lists
-            search_entity.willing_matches = search_entity.willing_matches.remove(other_entity.key)
-            other_entity.willing_matches = other_entity.willing_matches.remove(search_entity.key)
+            search_entity.willing_matches.remove(other_entity.key)
+            other_entity.willing_matches.remove(search_entity.key)
 
             search_entity.put()
             other_entity.put()
@@ -166,21 +213,12 @@ class ConfirmMeetupMatchHandler(ApiHandler):
 
             # Set the current meetup of the users to the new meetup
             for user_key in users:
-                user = user_key.get()
-                current_meetup = user.current_meetup.get()
-
-                # Add the meetup to the meetup history if there was another user besides the 
-                # current user in it
-                if len(current_meetup.current_users) + len(current_meetup.previous_users) > 1:
-                    user.previous_meetups.append(current_meetup.key)
-
-                # Set the current meetup of the user to the new meetup
-                user.current_meetup = meetup.key
-                user.put()
+                leave_meetup(user_key)
+                join_meetup(meetup, user_key)
 
             # 
-            search_entity.confirmed_status = SearchEntity.Status.CONFIRMED
-            other_entity.confirmed_status = SearchEntity.Status.CONFIRMED
+            search_entity.pending_match_status = SearchEntity.Status.CONFIRMED
+            other_entity.pending_match_status = SearchEntity.Status.CONFIRMED
 
             #
             search_entity.meetup = meetup.key
@@ -227,6 +265,50 @@ class UpdateMeetupHandler(ApiHandler):
             Keys.USERNAME : usernames,
         }
 
-class LeaveMeetup(ApiHandler):
+class StartMeetupHandler(ApiHandler):
     def handle(self):
-        pass
+        user = ndb.Key(urlsafe=self.getParam(Keys.USER_KEY)).get()
+
+        # Retrieve the meetup the user is currently in or create a new meetup if they are not
+        # currently in a meetup
+        meetup = None
+        if user.current_meetup is None or user.current_meetup.get() is None:
+
+            # Add the user as a current user in the meetup
+            meetup = Meetup(current_users=[user.key])
+            meetup.put()
+
+            # Specify the current meetup the user is in
+            user.current_meetup = meetup.key
+            user.put()
+        else: 
+            meetup = user.current_meetup.get()
+
+        # Return the meetup key to the user
+        return {
+            Keys.SUCCESS : 1
+        }
+
+class UpdateMeetupHandler(ApiHandler):
+    def handle(self):
+        user = ndb.Key(urlsafe=self.getParam(Keys.USER_KEY)).get()
+
+        usernames = []
+        for members in user.current_meetup.get().current_users:
+            usernames.append(members.username)
+
+        return {
+            Keys.SUCCESS : 1,
+            Keys.USERNAME : usernames,
+        }
+
+class LeaveMeetupHandler(ApiHandler):
+    def handle(self):
+        user_key = ndb.Key(urlsafe=self.getParam(Keys.USER_KEY))
+
+        leave_meetup(user_key)
+
+        # Return the meetup key to the user
+        return {
+            Keys.SUCCESS : 1
+        }

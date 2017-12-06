@@ -21,8 +21,8 @@ public class MainActivity extends Activity {
         meetups.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, MeetupSearchActivity.class);
-                startActivityForResult(myIntent, 0);
+                Intent myIntent = new Intent(MainActivity.this, MeetupActivity.class);
+                startActivity(myIntent);
             }
         });
 
@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(MainActivity.this, AccountManageActivity.class);
-                startActivityForResult(myIntent, 0);
+                startActivity(myIntent);
             }
         });
 
@@ -48,7 +48,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(MainActivity.this, UserContactDevs.class);
-                startActivityForResult(myIntent, 0);
+                startActivity(myIntent);
             }
         });
     }

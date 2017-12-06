@@ -7,7 +7,9 @@ import com.dhrw.sitwithus.util.Keys;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UserProfileData {
+import java.io.Serializable;
+
+public class UserProfileData implements Serializable {
 
     public final String userKey;
     public final String username;

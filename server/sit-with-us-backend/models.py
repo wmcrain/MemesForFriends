@@ -147,7 +147,7 @@ class Meetup(ndb.Model):
     previous_users = ndb.KeyProperty(kind='User', indexed=False, repeated=True)
 
 class SearchEntity(ndb.Model):
-    meetup = ndb.KeyProperty(kind='Meetup', indexed=False, default=None)
+    meetup = ndb.KeyProperty(kind='Meetup', indexed=True, default=None)
 
     latitude = ndb.FloatProperty(required=True)
     longitude = ndb.FloatProperty(required=True)
@@ -156,6 +156,8 @@ class SearchEntity(ndb.Model):
 
     pending_match = ndb.KeyProperty(kind='SearchEntity')
     pending_match_status = ndb.StringProperty()
+
+    searching_users = ndb.KeyProperty(kind='User', indexed=False, repeated=True)
 
     class Status():
         """ The enumeration of keys that map to values in JSON request and responses. """

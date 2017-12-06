@@ -23,7 +23,6 @@ import com.dhrw.sitwithus.util.Keys;
 import com.dhrw.sitwithus.util.Preferences;
 
 import android.widget.Button;
-//crashing
 
 public class BlockListActivity extends Activity {
 
