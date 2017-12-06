@@ -2,5 +2,10 @@
 body {
   padding-top: 3.5rem;
   background: linear-gradient(#00a060, #0060a0);
+  background: -webkit-linear-gradient(#00a060, #0060a0);
+  background: -o-linear-gradient(#00a060, #0060a0);
+  background: -moz-linear-gradient(#00a060, #0060a0);
+  background: linear-gradient(#00a060, #0060a0);
+
   color: #bbbbbb;
 }
