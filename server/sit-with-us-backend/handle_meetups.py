@@ -250,21 +250,6 @@ class MeetupHistoryHandler(ApiHandler):
             Keys.HISTORY : history
         }  
 
-class UpdateMeetupHandler(ApiHandler):
-    def handle(self):
-        meetup_key = self.getParam(Keys.MEETUP_KEY)
-
-        meetup = ndb.Key(urlsafe=meetup_key).get()
-
-        usernames = []
-        for user in meetup.current_meetup:
-            usernames.append(user.get().username)
-
-        return {
-            Keys.SUCCESS : 1,
-            Keys.USERNAME : usernames,
-        }
-
 class StartMeetupHandler(ApiHandler):
     def handle(self):
         user = ndb.Key(urlsafe=self.getParam(Keys.USER_KEY)).get()
@@ -295,7 +280,7 @@ class UpdateMeetupHandler(ApiHandler):
 
         usernames = []
         for members in user.current_meetup.get().current_users:
-            usernames.append(members.username)
+            usernames.append(members.get().username)
 
         return {
             Keys.SUCCESS : 1,

@@ -2,6 +2,12 @@ package com.dhrw.sitwithus.server;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
@@ -28,5 +34,27 @@ public class EncodedBitmap {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return Base64.encodeToString(stream.toByteArray(), Base64.URL_SAFE);
+    }
+
+    /** */
+    public static Bitmap getRoundBitmap(Bitmap bitmap, int roundRadius) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
+                .getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        // Fill the canvas with a transparent background
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+
+        // Draw the region where the image should be drawn
+        Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        paint.setColor(0xffffffff);
+        canvas.drawRoundRect(new RectF(rect), roundRadius, roundRadius, paint);
+
+        // Draw the image to all non-transparent parts
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
     }
 }

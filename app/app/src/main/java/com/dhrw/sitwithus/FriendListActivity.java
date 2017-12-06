@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.dhrw.sitwithus.server.EncodedBitmap;
 import com.dhrw.sitwithus.server.UserProfileData;
 import com.dhrw.sitwithus.server.ServerRequest;
 import com.dhrw.sitwithus.server.ServerResponse;
@@ -55,7 +56,7 @@ public class FriendListActivity extends Activity {
                 pic.setImageBitmap(getRoundedCornerBitmap(profile.picture, (int) (profile.picture.getWidth() * .7)));
             } else {
                 Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.david);
-                pic.setImageBitmap(getRoundedCornerBitmap(bm, (int) (bm.getWidth() * .7)));
+                pic.setImageBitmap(EncodedBitmap.getRoundBitmap(bm, (int) (bm.getWidth() * .7)));
             }
 
             view.setOnClickListener(new View.OnClickListener() {

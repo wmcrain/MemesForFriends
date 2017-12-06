@@ -1,7 +1,10 @@
 package com.dhrw.sitwithus.server;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
+import com.dhrw.sitwithus.R;
 import com.dhrw.sitwithus.util.Keys;
 
 import org.json.JSONException;
@@ -30,5 +33,11 @@ public class UserProfileData implements Serializable {
         bio = object.getString(Keys.BIO);
         picture = object.has(Keys.PICTURE) ?
                 EncodedBitmap.toBitmap(object.getString(Keys.PICTURE)) : null;
+    }
+
+    /** */
+    public Bitmap getPicture(Context context) {
+        return (picture != null) ? picture :
+                BitmapFactory.decodeResource(context.getResources(), R.mipmap.david);
     }
 }
