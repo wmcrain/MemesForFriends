@@ -1,6 +1,9 @@
 package com.dhrw.sitwithus;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,7 +39,7 @@ public class ViewProfileActivity extends Activity{
             public void onSuccess(int responseCode, ServerResponse responseMessage) {
                 super.onSuccess(responseCode, responseMessage);
 
-                final UserProfileData profile = responseMessage.getProfileArray(Keys.PROFILE).get(0);
+                final UserProfileData profile = responseMessage.getProfileArray(Keys.PROFILE).get(0);;
 
                 nameView.setText(profile.firstName+ " " + profile.lastName);
 
@@ -49,14 +52,33 @@ public class ViewProfileActivity extends Activity{
                 blockButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO: Popup are you sure?
-                        ServerRequest.createBlockRequest(
+                        popupBlock(profile);
+
+                    /*    ServerRequest.createBlockRequest(
                                 Preferences.getUserKey(ViewProfileActivity.this),
-                                profile.userKey).sendRequest();
+                                profile.userKey).sendRequest();*/
                     }
                 });
             }
         });
+
+    }
+    public void popupBlock(final UserProfileData profile){
+        new AlertDialog.Builder(this, R.style.AlertDialogTheme)
+                .setMessage("Are you sure you want to block this user?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        ServerRequest.createBlockRequest(
+                                Preferences.getUserKey(ViewProfileActivity.this),
+                                profile.userKey).sendRequest();
+                        //TODO: If user is a friend, remove them from the user's friends list as well
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+
 
     }
 }
