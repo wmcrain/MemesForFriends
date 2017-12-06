@@ -3,6 +3,7 @@ package com.dhrw.sitwithus;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.app.Notification;
+import android.app.NotificationManager;
 
 import com.dhrw.sitwithus.server.EncodedBitmap;
 import com.dhrw.sitwithus.server.UserProfileData;
@@ -275,8 +278,15 @@ public class MeetupSearchActivity extends Activity {
                         if (user.picture != null) {
                             args.putString(Keys.PICTURE, EncodedBitmap.toString(user.picture));
                         }
-
-
+                        //TODO: Figure out what icon to use here.
+                        //TODO: Only push this if the application is in background-unsure if possible at this API level
+                        NotificationManager notif = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+                        //https://developer.android.com/training/notify-user/build-notification.html
+                        Notification notify=new Notification.Builder
+                                (getApplicationContext()).setContentTitle("Sit With Us").setContentText("You have a pending match!").
+                                setContentTitle("Sit With Us").setSmallIcon(R.mipmap.david).build();
+                        notify.flags |= Notification.FLAG_AUTO_CANCEL;
+                        notif.notify(0, notify);
                         // Show the popup
                         confirmPopup.setArguments(args);
                         confirmPopup.show(fm, "Confirm Match");

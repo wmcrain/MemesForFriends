@@ -53,6 +53,7 @@ public class MainActivity extends Activity {
     }
 
     public void attemptLogout(){
+
         new AlertDialog.Builder(this, R.style.AlertDialogTheme)   //can't figure out how to make this text black
                 .setMessage("Are you sure you want to log out?")
                 .setCancelable(false)
