@@ -16,11 +16,13 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-
         Button meetups = (Button) findViewById(R.id.meetupsMain);
         meetups.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: Make an InMeetup Activity
+                //TODO: Take the user to this Activity
+                //TODO: Implement the below code for the search button in InMeetup
                 Intent myIntent = new Intent(MainActivity.this, MeetupSearchActivity.class);
                 startActivityForResult(myIntent, 0);
             }
