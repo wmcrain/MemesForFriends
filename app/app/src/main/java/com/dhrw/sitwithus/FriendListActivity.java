@@ -80,6 +80,15 @@ public class FriendListActivity extends Activity {
     }
 
     @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+
+        View empty = findViewById(R.id.friendsEmpty);
+        ListView list = (ListView) findViewById(R.id.friend_list);
+        list.setEmptyView(empty);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_friend_list);

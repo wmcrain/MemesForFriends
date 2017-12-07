@@ -70,6 +70,15 @@ public class BlockListActivity extends Activity {
 
 
     @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        View empty = findViewById(R.id.blockEmpty);
+        ListView list = (ListView) findViewById(R.id.block_list);
+        list.setEmptyView(empty);
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_block_list);
