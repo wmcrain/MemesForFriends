@@ -55,6 +55,7 @@ public class ServerRequest {
     private static final String DIR_MEETUP_UPDATE = "meetup/update";
     private static final String DIR_MEETUP_HISTORY = "meetup/history";
     private static final String DIR_TOGGLE_FRIEND = "friends/toggle";
+    private static final String DIR_REMOVE_FRIEND = "friends/remove";
     
     /** Holds the methods that will be called when the response has arrived from the server. */
     public static abstract class Callback {
@@ -478,6 +479,18 @@ public class ServerRequest {
             data.put(Keys.PENDING_MATCH, otherKey);
             data.put(Keys.CONFIRMED, isWilling ? 1 : 0);
             return new ServerRequest(DIR_TOGGLE_FRIEND, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
+    public static ServerRequest createRemoveFriendRequest(String userKey, String otherKey) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
+            data.put(Keys.PENDING_MATCH, otherKey);
+            return new ServerRequest(DIR_REMOVE_FRIEND, data);
 
         } catch (JSONException e) {
             throw new IllegalArgumentException("Unable to create login ping request.");

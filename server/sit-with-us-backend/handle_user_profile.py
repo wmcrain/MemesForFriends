@@ -78,6 +78,16 @@ def remove_friend(user, other):
         other.put()
         user.put()
 
+
+class RemoveFriendHandler(ApiHandler):
+    def handle(self):
+        user = ndb.Key(urlsafe=self.getParam(Keys.USER_KEY)).get()
+        other = ndb.Key(urlsafe=self.getParam(Keys.PENDING_MATCH)).get()
+        remove_friend(user, other)
+
+        return { Keys.SUCCESS : 1 }
+
+
 class ToggleFriendHandler(ApiHandler):
     def handle(self):
         user = ndb.Key(urlsafe=self.getParam(Keys.USER_KEY)).get()
@@ -88,8 +98,9 @@ class ToggleFriendHandler(ApiHandler):
             if not user.key in other.pending_friends:
                 other.pending_friends.append(user.key)
                 other.put()
-        else:
-            remove_friend(user, other)
+        elif user.key in other.pending_friends:
+            other.pending_friends.remove(user.key)
+            other.put()
 
         if user.key in other.pending_friends and other.key in user.pending_friends:
             user.pending_friends.remove(other.key)

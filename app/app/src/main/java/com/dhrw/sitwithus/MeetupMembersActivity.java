@@ -13,6 +13,9 @@ import java.util.List;
 
 public class MeetupMembersActivity extends Activity{
 
+    private ProfileListAdapter adapter;
+    private List<String> usernames;
+
     @Override
     public void onContentChanged() {
         super.onContentChanged();
@@ -26,14 +29,19 @@ public class MeetupMembersActivity extends Activity{
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_meetup_members);
 
-        List<String> usernames = getIntent().getStringArrayListExtra(Keys.USERNAME);
+        usernames = getIntent().getStringArrayListExtra(Keys.USERNAME);
 
         final ListView listView = (ListView) findViewById(R.id.friend_list);
 
-        final ProfileListAdapter adapter = new ProfileListAdapter(this,
+        adapter = new ProfileListAdapter(this,
                 Preferences.getUserKey(this));
         listView.setAdapter(adapter);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         adapter.retrieveProfiles(usernames);
     }
 }

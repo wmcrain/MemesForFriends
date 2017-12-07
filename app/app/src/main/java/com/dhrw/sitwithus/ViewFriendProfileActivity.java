@@ -68,8 +68,8 @@ public class ViewFriendProfileActivity extends Activity{
                 });
             }
         });
-
     }
+
     public void popupBlock(final UserProfileData profile){
         new AlertDialog.Builder(this, R.style.AlertDialogTheme)
                 .setMessage("Are you sure you want to block this user?")
@@ -86,15 +86,16 @@ public class ViewFriendProfileActivity extends Activity{
                 .setNegativeButton("No", null)
                 .show();
     }
+
     public void removeFriend(final UserProfileData profile){
         new AlertDialog.Builder(this, R.style.AlertDialogTheme)
                 .setMessage("Are you sure you want to remove this user as a friend?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        ServerRequest.createToggleFriendRequest(
+                        ServerRequest.createRemoveFriendRequest(
                                 Preferences.getUserKey(ViewFriendProfileActivity.this),
-                                profile.userKey, false).sendRequest();
+                                profile.userKey).sendRequest();
 
                         finish();
                     }
