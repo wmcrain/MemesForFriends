@@ -82,7 +82,6 @@ public class FriendListActivity extends Activity {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-
         View empty = findViewById(R.id.friendsEmpty);
         ListView list = (ListView) findViewById(R.id.friend_list);
         list.setEmptyView(empty);
@@ -96,6 +95,7 @@ public class FriendListActivity extends Activity {
         friends = new ArrayList<>();
 
         final ListView listView = (ListView) findViewById(R.id.friend_list);
+
 
         //
         ServerRequest getFriends = ServerRequest.createGetFriends(
@@ -121,6 +121,10 @@ public class FriendListActivity extends Activity {
                         super.onSuccess(responseCode, responseMessage);
 
                         friends = responseMessage.getProfileArray(Keys.PROFILE);
+                        if (friends.size() == 0) {
+                            TextView changetext = (TextView) findViewById(R.id.friendsEmpty);
+                            changetext.setText("No friends :(");
+                        }
                         adapter.notifyDataSetChanged();
                     }
                 });

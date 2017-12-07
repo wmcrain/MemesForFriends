@@ -94,6 +94,11 @@ public class BlockListActivity extends Activity {
                     public void onSuccess(int responseCode, ServerResponse responseMessage) {
                         super.onSuccess(responseCode, responseMessage);
                         blockedUsers = responseMessage.getBlockedUserList(Keys.BLOCKED);
+
+                        if (blockedUsers.size() == 0) {
+                            TextView changetext = (TextView) findViewById(R.id.blockEmpty);
+                            changetext.setText("No blocked users :)");
+                        }
                         adapter.notifyDataSetChanged();
                     }
                 }
