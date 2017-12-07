@@ -66,8 +66,6 @@ public class MainActivity extends Activity {
                 })
                 .setNegativeButton("No", null)
                 .show();
-
-
     }
 
     @Override

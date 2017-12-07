@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -173,6 +174,8 @@ public class MeetupSearchActivity extends Activity {
 
             //
             TextView meetupName = (TextView) view.findViewById(R.id.confirm_match_text);
+            meetupName.setTextColor(Color.parseColor("#ffffff"));
+            meetupName.setBackgroundColor(Color.parseColor("#000000"));
             meetupName.setText(firstName + " " + lastName + " wants to match with you!");
 
             // The the image of the person this user matched with
