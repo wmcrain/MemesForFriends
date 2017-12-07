@@ -34,7 +34,8 @@
         <activity android:name=".EditProfileActivity">
         </activity>
 
-        <activity android:name=".MeetupSearchActivity">
+        <activity android:name=".MeetupSearchActivity"
+                  android:launchMode="singleTop">
         </activity>
 
         <activity android:name=".UserContactDevs">
@@ -52,7 +53,8 @@
         <activity android:name=".FriendListActivity">
         </activity>
 
-        <activity android:name=".MeetupActivity">
+        <activity android:name=".MeetupActivity"
+                  android:launchMode="singleTop">
         </activity>
 
 
