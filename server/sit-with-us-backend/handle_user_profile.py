@@ -65,7 +65,7 @@ class GetFriendsHandler(ApiHandler):
 
         return { 
             Keys.SUCCESS : 1, 
-            Keys.USERNAME : [x.get().username for x in user.friends if not x.get() is None]
+            Keys.USERNAME : list(set([x.get().username for x in user.friends if not x.get() is None]))
         }
 
 def remove_friend(user, other):
