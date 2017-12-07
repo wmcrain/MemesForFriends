@@ -125,6 +125,8 @@ public class EditProfileActivity extends Activity{
 
                 bio.setText(profile.bio);
 
+                contactinfo.setText(profile.phoneNumber);
+
                 pic.setImageBitmap(profile.getPicture(EditProfileActivity.this));
 
             }
