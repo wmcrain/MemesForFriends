@@ -38,6 +38,7 @@ import com.dhrw.sitwithus.server.ServerResponse;
 import com.dhrw.sitwithus.sync.MeetupSearcher;
 import com.dhrw.sitwithus.util.Keys;
 import com.dhrw.sitwithus.util.Preferences;
+import com.dhrw.sitwithus.view.CircleCharacterView;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -76,11 +77,22 @@ public class MeetupSearchActivity extends Activity {
             name.setText(profile.firstName + " " + profile.lastName);
 
             ImageView pic = (ImageView) view.findViewById(R.id.match_entry_picture);
-            if (profile.picture != null) {
-                pic.setImageBitmap(getRoundedCornerBitmap(profile.picture, (int) (profile.picture.getWidth() * .7)));
-            } else {
-                Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.david);
-                pic.setImageBitmap(getRoundedCornerBitmap(bm, (int) (bm.getWidth() * .7)));
+            pic.setImageBitmap(profile.getPicture(MeetupSearchActivity.this));
+
+            if (searchMeetup.usernames.size() == 2) {
+                ImageView pic2 = (ImageView) view.findViewById(R.id.match_entry_picture_2);
+                pic2.setImageBitmap(usernameProfiles.get(searchMeetup.usernames.get(1))
+                        .getPicture(MeetupSearchActivity.this));
+                pic2.setVisibility(View.VISIBLE);
+
+            } else if (searchMeetup.usernames.size() > 2) {
+
+                CircleCharacterView circleView = (CircleCharacterView)
+                        view.findViewById(R.id.match_entry_more);
+
+                char c = (char) ('0' + Math.min(searchMeetup.usernames.size() - 1, 9));
+                circleView.setLetter(c);
+                circleView.setVisibility(View.VISIBLE);
             }
 
             TextView GPS = (TextView) view.findViewById(R.id.distanceMatchEntry);
@@ -91,10 +103,20 @@ public class MeetupSearchActivity extends Activity {
 
                 @Override
                 public void onClick(View view) {
-                    Intent viewProfile = new Intent(MeetupSearchActivity.this,
-                            ViewProfileActivity.class);
-                    viewProfile.putExtra(Keys.USERNAME, profile.username);
-                    startActivity(viewProfile);
+
+                    if (searchMeetup.usernames.size() == 1) {
+
+                        Intent viewProfile = new Intent(MeetupSearchActivity.this,
+                                ViewProfileActivity.class);
+                        viewProfile.putExtra(Keys.USERNAME, profile.username);
+                        startActivity(viewProfile);
+                    } else {
+                        Intent intent = new Intent(MeetupSearchActivity.this,
+                                MeetupMembersActivity.class);
+                        intent.putStringArrayListExtra(Keys.USERNAME,
+                                new ArrayList<>(searchMeetup.usernames));
+                        startActivity(intent);
+                    }
                 }
             });
             //need to check state of a match to set toggleMatched to the proper state

@@ -13,18 +13,18 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public abstract class ProfileArrayAdapter extends ArrayAdapter {
+public abstract class ProfileRetrieverAdapter extends ArrayAdapter {
 
     private LinkedHashMap<String, UserProfileData> usernameProfiles;
     private String userKey;
 
-    public ProfileArrayAdapter(Context context, int layout, String userKey) {
+    public ProfileRetrieverAdapter(Context context, int layout, String userKey) {
         super(context, layout);
         this.usernameProfiles = new LinkedHashMap<>();
         this.userKey = userKey;
     }
 
-    public final void retrieveProfiles(List<String> usernames) {
+    public void retrieveProfiles(List<String> usernames) {
 
         // Retrieve a list of all the usernames for which the profile has not been cached
         ArrayList<String> newUsernames = new ArrayList<>();
@@ -50,11 +50,16 @@ public abstract class ProfileArrayAdapter extends ArrayAdapter {
                         usernameProfiles.put(profileData.username, profileData);
                     }
 
+                    onRetrieved();
+
                     //
                     notifyDataSetChanged();
                 }
             });
         } else {
+
+            onRetrieved();
+
             notifyDataSetChanged();
         }
     }
@@ -62,4 +67,6 @@ public abstract class ProfileArrayAdapter extends ArrayAdapter {
     protected final UserProfileData getProfile(String username) {
         return usernameProfiles.get(username);
     }
+
+    protected void onRetrieved() { }
 }

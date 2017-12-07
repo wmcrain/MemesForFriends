@@ -44,4 +44,8 @@ public class UserProfileData {
     public boolean isFriend() {
         return true; // TODO: Change to check if the phone number is present
     }
+
+    public boolean isSelf() {
+        return false;
+    }
 }

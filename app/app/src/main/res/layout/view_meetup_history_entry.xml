@@ -47,7 +47,7 @@
         android:layout_marginTop="@dimen/entry_spacing"
         android:layout_marginBottom="@dimen/entry_spacing"
         android:layout_toEndOf="@id/match_entry_picture_layout"
-        android:gravity="center_vertical"
+        android:gravity="center_vertical|end"
         android:textSize="22sp"/>
 
 

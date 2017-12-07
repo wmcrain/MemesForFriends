@@ -60,6 +60,9 @@
         <activity android:name =".ViewFriendProfileActivity">
         </activity>
 
+        <activity android:name=".MeetupMembersActivity">
+        </activity>
+
 
     </application>
 

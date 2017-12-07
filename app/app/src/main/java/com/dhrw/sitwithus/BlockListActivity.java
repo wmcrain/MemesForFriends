@@ -32,8 +32,7 @@ public class BlockListActivity extends Activity {
     private List<BlockedUserData> blockedUsers = new ArrayList<>();
     private BlockArrayAdapter adapter;
 
-    private class BlockArrayAdapter extends ArrayAdapter
-    {
+    private class BlockArrayAdapter extends ArrayAdapter {
 
         BlockArrayAdapter() {
             super(BlockListActivity.this, R.layout.activity_block_list);
