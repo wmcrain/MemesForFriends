@@ -116,7 +116,8 @@ class LoginUserHandler(ApiHandler):
     def handle(self):
         email = self.getParam(Keys.EMAIL)
 
-        user_entries = [u for u in User.query(User.email == email).fetch() if u.verified]
+        user_entries = [u for u in User.query(User.email == email).fetch()]
+
         if len(user_entries) == 0:
             return { Keys.SUCCESS : 1, Keys.DEVICE_KEY : 999999 }
 

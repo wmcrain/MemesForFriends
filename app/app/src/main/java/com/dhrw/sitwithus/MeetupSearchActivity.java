@@ -92,7 +92,7 @@ public class MeetupSearchActivity extends Activity {
                 CircleCharacterView circleView = (CircleCharacterView)
                         view.findViewById(R.id.match_entry_more);
 
-                char c = (char) ('0' + Math.min(searchMeetup.usernames.size() - 1, 9));
+                char c = (char) ('0' + Math.min(searchMeetup.usernames.size() - 2, 9));
                 circleView.setLetter(c);
                 circleView.setVisibility(View.VISIBLE);
             }

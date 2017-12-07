@@ -33,4 +33,5 @@ app = webapp2.WSGIApplication([
     ('/friends/get', handle_user_profile.GetFriendsHandler),
     ('/friends/toggle', handle_user_profile.ToggleFriendHandler),
     ('/friends/remove', handle_user_profile.RemoveFriendHandler),
+    ('/friends/remove/all/danger', handle_user_profile.RemoveAllFriends),
 ], debug=True)

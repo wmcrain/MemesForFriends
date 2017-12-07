@@ -1,6 +1,7 @@
 from handle import ApiHandler
 from handle import Keys
 from models import User
+import webapp2
 
 from google.appengine.ext import ndb
 
@@ -86,6 +87,18 @@ class RemoveFriendHandler(ApiHandler):
         remove_friend(user, other)
 
         return { Keys.SUCCESS : 1 }
+
+class RemoveAllFriends(webapp2.RequestHandler):
+    def get(self):
+        users = User.query()
+        for user in users:
+            user.friends = []
+            user.pending_friends = []
+            user.blocked = []
+            user.put()
+
+        self.response.set_status(200)
+        self.response.write("Good")
 
 
 class ToggleFriendHandler(ApiHandler):
