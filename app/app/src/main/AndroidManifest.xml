@@ -57,6 +57,9 @@
                   android:launchMode="singleTop">
         </activity>
 
+        <activity android:name =".ViewFriendProfileActivity">
+        </activity>
+
 
     </application>
 

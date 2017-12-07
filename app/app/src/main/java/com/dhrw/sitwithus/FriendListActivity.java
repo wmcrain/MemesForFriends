@@ -63,13 +63,12 @@ public class FriendListActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     Intent viewProfile = new Intent(FriendListActivity.this,
-                            ViewProfileActivity.class);
+                            ViewFriendProfileActivity.class);
                     viewProfile.putExtra(Keys.USERNAME, profile.username);
                     startActivity(viewProfile);
                 }
             });
 
-            //View view = new View()
             return view;
         }
 
@@ -80,6 +79,14 @@ public class FriendListActivity extends Activity {
     }
 
     @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        View empty = findViewById(R.id.friendsEmpty);
+        ListView list = (ListView) findViewById(R.id.friend_list);
+        list.setEmptyView(empty);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_friend_list);
@@ -87,6 +94,7 @@ public class FriendListActivity extends Activity {
         friends = new ArrayList<>();
 
         final ListView listView = (ListView) findViewById(R.id.friend_list);
+
 
         //
         ServerRequest getFriends = ServerRequest.createGetFriends(
@@ -112,6 +120,10 @@ public class FriendListActivity extends Activity {
                         super.onSuccess(responseCode, responseMessage);
 
                         friends = responseMessage.getProfileArray(Keys.PROFILE);
+                        if (friends.size() == 0) {
+                            TextView changetext = (TextView) findViewById(R.id.friendsEmpty);
+                            changetext.setText("No friends :(");
+                        }
                         adapter.notifyDataSetChanged();
                     }
                 });
