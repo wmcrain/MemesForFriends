@@ -336,21 +336,6 @@ public class MeetupSearchActivity extends Activity {
                 //the thread has been stopped
             }
         });
-        Button matched = (Button) findViewById(R.id.matchedSearch);
-        matched.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(MeetupSearchActivity.this, MeetupSearchPendingActivity.class);
-                startActivityForResult(myIntent, 0);
-            }
-        });
-
-        Button unmatched = (Button) findViewById(R.id.unmatchedSearch);
-        unmatched.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
 
         //code for swiping needs to be added, might replace swiping with toggle
         //code for swapping between already toggled users and to be toggled users

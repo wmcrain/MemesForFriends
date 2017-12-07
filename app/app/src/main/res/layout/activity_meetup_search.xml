@@ -32,48 +32,7 @@
                 android:ems="16"
                 android:gravity="center"
                 android:inputType="none"
-                android:text="UNMATCHED" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/matchpendSearch"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".1"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".1" />
-
-            <Button
-                android:id="@+id/unmatchedSearch"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".35"
-                android:text="Unmatched"
-                android:background="@drawable/confirmed_button"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".1" />
-
-            <Button
-                android:id="@+id/matchedSearch"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".35"
-                android:text="Matched"
-                android:background="@drawable/button_test"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".1" />
+                android:text="Searching" />
 
         </LinearLayout>
 
@@ -81,7 +40,7 @@
             android:id="@+id/matchesSearch"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".7"
+            android:layout_weight=".8"
             android:orientation="horizontal">
 
             <ListView
