@@ -31,4 +31,5 @@ app = webapp2.WSGIApplication([
     ('/meetup/leave', handle_meetups.LeaveMeetupHandler),
     ('/meetup/update', handle_meetups.UpdateMeetupHandler),
     ('/friends/get', handle_user_profile.GetFriendsHandler),
+    ('/friends/toggle', handle_user_profile.ToggleFriendHandler),
 ], debug=True)

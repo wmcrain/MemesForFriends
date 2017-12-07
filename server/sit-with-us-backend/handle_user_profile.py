@@ -7,8 +7,8 @@ from google.appengine.ext import ndb
 
 class GetProfileHandler(ApiHandler):
     def handle(self):
-        user_key = self.getParam(Keys.USER_KEY)
         usernames = self.getParam(Keys.USERNAME)
+        self_user = ndb.Key(urlsafe=self.getParam(Keys.USER_KEY)).get()
 
         profiles = []
 
@@ -27,12 +27,14 @@ class GetProfileHandler(ApiHandler):
                 Keys.USERNAME : user.username,
                 Keys.FIRST_NAME : user.first_name,
                 Keys.LAST_NAME : user.last_name,
-                Keys.PHONE_NUMBER : user.phone,
                 Keys.BIO : user.bio,
             }
 
             if user.picture is not None:
                 properties.update({ Keys.PICTURE : user.picture })
+
+            if user.key in self_user.friends: 
+                properties.update({ Keys.PHONE_NUMBER : user.phone })
 
             profiles.append(properties)
 
@@ -62,11 +64,42 @@ class GetFriendsHandler(ApiHandler):
 
         return { 
             Keys.SUCCESS : 1, 
-            Keys.USERNAME : [x.username for x in user.query().fetch()]
+            Keys.USERNAME : [x.get().username for x in user.friends if not x.get() is None]
         }
+
+def remove_friend(user, other):
+    if user.key in other.pending_friends:
+        other.pending_friends.remove(user.key)
+        other.put()
+    elif other.key in user.friends:
+        user.friends.remove(other.key)
+        if user.key in other.friends:
+            other.friends.remove(user.key)
+        other.put()
+        user.put()
 
 class ToggleFriendHandler(ApiHandler):
     def handle(self):
+        user = ndb.Key(urlsafe=self.getParam(Keys.USER_KEY)).get()
+        other = ndb.Key(urlsafe=self.getParam(Keys.PENDING_MATCH)).get()
+        confirmed = int(self.getParam(Keys.CONFIRMED)) == 1
+
+        if confirmed:
+            if not user.key in other.pending_friends:
+                other.pending_friends.append(user.key)
+                other.put()
+        else:
+            remove_friend(user, other)
+
+        if user.key in other.pending_friends and other.key in user.pending_friends:
+            user.pending_friends.remove(other.key)
+            other.pending_friends.remove(user.key)
+
+            user.friends.append(other.key)
+            other.friends.append(user.key)
+
+            user.put()
+            other.put()
         
         return { Keys.SUCCESS : 1 }
 
@@ -102,6 +135,8 @@ class AddBlockHandler(ApiHandler):
         if block_user_key is not None and not block_user_key in user.blocked:
             user.blocked.append(block_user_key)
             user.put()
+
+            remove_friend(user, block_user_key.get())
         
         return { Keys.SUCCESS : 1 }
 

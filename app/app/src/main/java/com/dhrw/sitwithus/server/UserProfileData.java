@@ -1,10 +1,15 @@
 package com.dhrw.sitwithus.server;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.View;
 
+import com.dhrw.sitwithus.EditProfileActivity;
 import com.dhrw.sitwithus.R;
+import com.dhrw.sitwithus.ViewFriendProfileActivity;
+import com.dhrw.sitwithus.ViewProfileActivity;
 import com.dhrw.sitwithus.util.Keys;
 
 import org.json.JSONException;
@@ -27,7 +32,9 @@ public class UserProfileData {
         username = object.getString(Keys.USERNAME);
         firstName = object.getString(Keys.FIRST_NAME);
         lastName = object.getString(Keys.LAST_NAME);
-        phoneNumber = object.getString(Keys.PHONE_NUMBER);
+
+        phoneNumber = object.has(Keys.PHONE_NUMBER) ?
+                object.getString(Keys.PHONE_NUMBER) : null;
 
         // Retrieve the profile page assets of the user
         bio = object.getString(Keys.BIO);
@@ -42,10 +49,23 @@ public class UserProfileData {
     }
 
     public boolean isFriend() {
-        return true; // TODO: Change to check if the phone number is present
+        return phoneNumber != null;
     }
 
-    public boolean isSelf() {
-        return false;
+    public void viewProfile(Context context, String userKey) {
+        if (userKey.equals(this.userKey)) {
+            Intent viewProfile = new Intent(context, EditProfileActivity.class);
+            context.startActivity(viewProfile);
+        } else {
+            if (isFriend()) {
+                Intent viewProfile = new Intent(context, ViewFriendProfileActivity.class);
+                viewProfile.putExtra(Keys.USERNAME, username);
+                context.startActivity(viewProfile);
+            } else {
+                Intent viewProfile = new Intent(context, ViewProfileActivity.class);
+                viewProfile.putExtra(Keys.USERNAME, username);
+                context.startActivity(viewProfile);
+            }
+        }
     }
 }

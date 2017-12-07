@@ -39,6 +39,7 @@ class Keys():
     HISTORY = "history"
     PENDING_MATCH = "pending_match"
     BLOCKED = "blocked"
+    FRIEND_KEY = "friend_key"
 
 
 class Links():

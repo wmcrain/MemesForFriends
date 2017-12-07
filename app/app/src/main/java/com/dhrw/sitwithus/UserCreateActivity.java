@@ -62,14 +62,13 @@ public class UserCreateActivity extends Activity {
 
                         } else {
 
-                            /*Toast.makeText(UserCreateActivity.this,
+                            Toast.makeText(UserCreateActivity.this,
                                     responseMessage.getString(Keys.ERROR_MESSAGE),
-                                    Toast.LENGTH_LONG).show();*/
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 });
             }
         });
     }
-
 }

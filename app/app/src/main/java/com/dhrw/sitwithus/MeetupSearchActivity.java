@@ -105,11 +105,8 @@ public class MeetupSearchActivity extends Activity {
                 public void onClick(View view) {
 
                     if (searchMeetup.usernames.size() == 1) {
-
-                        Intent viewProfile = new Intent(MeetupSearchActivity.this,
-                                ViewProfileActivity.class);
-                        viewProfile.putExtra(Keys.USERNAME, profile.username);
-                        startActivity(viewProfile);
+                        profile.viewProfile(MeetupSearchActivity.this,
+                                Preferences.getUserKey(MeetupSearchActivity.this));
                     } else {
                         Intent intent = new Intent(MeetupSearchActivity.this,
                                 MeetupMembersActivity.class);
@@ -119,6 +116,7 @@ public class MeetupSearchActivity extends Activity {
                     }
                 }
             });
+
             //need to check state of a match to set toggleMatched to the proper state
             //based on if a user has previously matched with them during this session
             //check match status when this switch is toggled

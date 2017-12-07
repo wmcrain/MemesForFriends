@@ -17,6 +17,7 @@ import com.dhrw.sitwithus.R;
 import com.dhrw.sitwithus.ViewFriendProfileActivity;
 import com.dhrw.sitwithus.server.UserProfileData;
 import com.dhrw.sitwithus.util.Keys;
+import com.dhrw.sitwithus.util.Preferences;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,9 +62,7 @@ public class ProfileListAdapter extends ProfileRetrieverAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent viewProfile = new Intent(context, ViewFriendProfileActivity.class);
-                viewProfile.putExtra(Keys.USERNAME, profile.username);
-                context.startActivity(viewProfile);
+                profile.viewProfile(context, Preferences.getUserKey(context));
             }
         });
 
@@ -77,10 +76,9 @@ public class ProfileListAdapter extends ProfileRetrieverAdapter {
 
     @Override
     public void retrieveProfiles(List<String> usernames) {
-        super.retrieveProfiles(usernames);
-
         this.usernames.clear();
         this.usernames.addAll(usernames);
+        super.retrieveProfiles(usernames);
     }
 
     @Override

@@ -34,6 +34,8 @@ import java.util.List;
 
 public class FriendListActivity extends Activity {
 
+    private ProfileListAdapter adapter;
+
     @Override
     public void onContentChanged() {
         super.onContentChanged();
@@ -49,13 +51,20 @@ public class FriendListActivity extends Activity {
 
         final ListView listView = (ListView) findViewById(R.id.friend_list);
 
-        final ProfileListAdapter adapter = new ProfileListAdapter(this,
+        adapter = new ProfileListAdapter(this,
                 Preferences.getUserKey(this));
         listView.setAdapter(adapter);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         //
         ServerRequest getFriends = ServerRequest.createGetFriends(
                 Preferences.getUserKey(this));
+
         getFriends.sendRequest(new ServerRequest.Callback() {
             @Override
             public void onSuccess(int responseCode, ServerResponse responseMessage) {

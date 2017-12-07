@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.dhrw.sitwithus.server.UserProfileData;
@@ -34,6 +36,8 @@ public class ViewProfileActivity extends Activity{
 
         final Button blockButton = (Button) findViewById(R.id.blockUser);
 
+        final Switch requestFriend = (Switch) findViewById(R.id.requestFriend);
+
         getProfile.sendRequest(new ServerRequest.Callback() {
             @Override
             public void onSuccess(int responseCode, ServerResponse responseMessage) {
@@ -45,18 +49,21 @@ public class ViewProfileActivity extends Activity{
 
                 bio.setText(profile.bio);
 
-                if (profile.picture != null) {
-                    pic.setImageBitmap(profile.picture);
-                }
+                pic.setImageBitmap(profile.getPicture(ViewProfileActivity.this));
 
                 blockButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         popupBlock(profile);
+                    }
+                });
 
-                    /*    ServerRequest.createBlockRequest(
-                                Preferences.getUserKey(ViewProfileActivity.this),
-                                profile.userKey).sendRequest();*/
+                requestFriend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                         ServerRequest.createToggleFriendRequest(
+                                 Preferences.getUserKey(ViewProfileActivity.this),
+                                 profile.userKey, isChecked).sendRequest();
                     }
                 });
             }

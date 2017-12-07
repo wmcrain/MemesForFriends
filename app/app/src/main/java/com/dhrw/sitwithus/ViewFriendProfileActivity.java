@@ -47,11 +47,11 @@ public class ViewFriendProfileActivity extends Activity{
 
                 bio.setText(profile.bio);
 
-//                contact.setText(profile.phoneNumber);
-
-                if (profile.picture != null) {
-                    pic.setImageBitmap(profile.picture);
+                if (profile.isFriend()) {
+                    contact.setText(profile.phoneNumber);
                 }
+
+                pic.setImageBitmap(profile.getPicture(ViewFriendProfileActivity.this));
 
                 blockButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -92,7 +92,10 @@ public class ViewFriendProfileActivity extends Activity{
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //TODO: If user is a friend, remove them from the user's friends list
+                        ServerRequest.createToggleFriendRequest(
+                                Preferences.getUserKey(ViewFriendProfileActivity.this),
+                                profile.userKey, false).sendRequest();
+
                         finish();
                     }
                 })
