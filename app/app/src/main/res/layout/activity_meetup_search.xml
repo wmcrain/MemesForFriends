@@ -91,6 +91,12 @@
                 android:scrollbars="vertical"
                 android:background="@drawable/list_view_border">
             </ListView>
+            <TextView
+                android:id="@+id/matchesEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Looking for users to match with!"
+                android:gravity="center"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/makingSpaceSearch"
