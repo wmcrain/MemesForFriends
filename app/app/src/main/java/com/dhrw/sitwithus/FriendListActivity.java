@@ -36,13 +36,13 @@ public class FriendListActivity extends Activity {
 
     private ProfileListAdapter adapter;
 
-    @Override
+    /*@Override
     public void onContentChanged() {
         super.onContentChanged();
         View empty = findViewById(R.id.friendsEmpty);
         ListView list = (ListView) findViewById(R.id.friend_list);
         list.setEmptyView(empty);
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstance){
