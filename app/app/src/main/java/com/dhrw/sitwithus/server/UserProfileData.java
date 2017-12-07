@@ -43,4 +43,8 @@ public class UserProfileData implements Serializable {
         return (picture != null) ? picture :
                 BitmapFactory.decodeResource(context.getResources(), R.mipmap.david);
     }
+
+    public boolean isFriend() {
+        return true; // TODO: Change to check if the phone number is present
+    }
 }

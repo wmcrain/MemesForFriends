@@ -3,6 +3,7 @@ package com.dhrw.sitwithus;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -47,11 +48,14 @@ public class MeetupSearchActivity extends Activity {
     private LinkedHashMap<String, UserProfileData> usernameProfiles;
     private LinkedHashMap<String, Boolean> willingMeetups;
 
-
     // The list
     private List<SearchMeetupData> searchMeetups;
 
     private MeetupSearcher searcher;
+
+    private SearchMeetupData pendingMeetup;
+
+    private boolean isVisible;
 
     private class UserSearchAdapter extends ArrayAdapter {
 
@@ -184,16 +188,14 @@ public class MeetupSearchActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meetup_search);
 
+        isVisible = true;
+
         usernameProfiles = new LinkedHashMap<>();
         willingMeetups = new LinkedHashMap<>();
         searchMeetups = new ArrayList<>();
 
         final ListView listView = (ListView) findViewById(R.id.usersSearch);
         final UserSearchAdapter adapter = new UserSearchAdapter();
-
-        // Create the match confirmation popup
-        final FragmentManager fm = getFragmentManager();
-        final MatchConfirmPopup confirmPopup = new MatchConfirmPopup();
 
         // Create the meetup searcher thread that pulls search results periodically from the server
         searcher = new MeetupSearcher(Preferences.getUserKey(this)) {
@@ -265,33 +267,37 @@ public class MeetupSearchActivity extends Activity {
              **/
             @Override
             public void onPendingMatch(String otherSearchKey) {
-                Bundle args = new Bundle();
 
                 for (SearchMeetupData meetup : searchMeetups) {
                     if (meetup.entityKey.equals(otherSearchKey)) {
-                        UserProfileData user = usernameProfiles.get(meetup.usernames.get(0));
+                        if (isVisible) {
+                            createMatchPopup(meetup);
+                        } else {
+                            pendingMeetup = meetup;
 
-                        // Set the popup to display the information of the first user
-                        args.putString(Keys.SEARCH_KEY, searcher.getSearchKey());
-                        args.putString(Keys.FIRST_NAME, user.firstName);
-                        args.putString(Keys.LAST_NAME, user.lastName);
-                        if (user.picture != null) {
-                            args.putString(Keys.PICTURE, EncodedBitmap.toString(user.picture));
+                            Intent notificationIntent = new Intent(
+                                    MeetupSearchActivity.this,
+                                    MeetupSearchActivity.class);
+                            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+                            // Allow clicking on the notification to go to the activity
+                            PendingIntent contentIntent = PendingIntent.getActivity(
+                                    MeetupSearchActivity.this, 0,
+                                    notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                            // Display the notification
+                            NotificationManager nm = (NotificationManager)
+                                    getSystemService(Context.NOTIFICATION_SERVICE);
+
+                            nm.notify(0, new Notification.Builder(getApplicationContext())
+                                    .setContentTitle("Sit With Us")
+                                    .setContentText("You have a pending match!")
+                                    .setContentTitle("Sit With Us")
+                                    .setSmallIcon(R.mipmap.david)
+                                    .setContentIntent(contentIntent)
+                                    .build());
                         }
-
-                        //TODO: Figure out what icon to use here.
-                        //TODO: Only push this if the application is in background-unsure if possible at this API level
-                        //TODO: Notification intent
-                        NotificationManager notif = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-                        //https://developer.android.com/training/notify-user/build-notification.html
-                        Notification notify=new Notification.Builder
-                                (getApplicationContext()).setContentTitle("Sit With Us").setContentText("You have a pending match!").
-                                setContentTitle("Sit With Us").setSmallIcon(R.mipmap.david).build();
-                        notify.flags |= Notification.FLAG_AUTO_CANCEL;
-                        notif.notify(0, notify);
-                        // Show the popup
-                        confirmPopup.setArguments(args);
-                        confirmPopup.show(fm, "Confirm Match");
                         break;
                     }
                 }
@@ -341,6 +347,41 @@ public class MeetupSearchActivity extends Activity {
         //code for swiping needs to be added, might replace swiping with toggle
         //code for swapping between already toggled users and to be toggled users
 
+    }
+
+    private void createMatchPopup(SearchMeetupData pendingMeetup) {
+        FragmentManager fm = getFragmentManager();
+        MatchConfirmPopup confirmPopup = new MatchConfirmPopup();
+
+        Bundle args = new Bundle();
+        UserProfileData user = usernameProfiles.get(pendingMeetup.usernames.get(0));
+
+        // Set the popup to display the information of the first user
+        args.putString(Keys.SEARCH_KEY, searcher.getSearchKey());
+        args.putString(Keys.FIRST_NAME, user.firstName);
+        args.putString(Keys.LAST_NAME, user.lastName);
+        if (user.picture != null) {
+            args.putString(Keys.PICTURE, EncodedBitmap.toString(user.picture));
+        }
+
+        confirmPopup.setArguments(args);
+        confirmPopup.show(fm, "Confirm Match");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isVisible = true;
+        if (pendingMeetup != null) {
+            createMatchPopup(pendingMeetup);
+            pendingMeetup = null;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isVisible = false;
     }
 
     @Override
