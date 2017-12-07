@@ -53,6 +53,7 @@ public class ServerRequest {
     private static final String DIR_MEETUP_START = "meetup/start";
     private static final String DIR_MEETUP_LEAVE = "meetup/leave";
     private static final String DIR_MEETUP_UPDATE = "meetup/update";
+    private static final String DIR_MEETUP_HISTORY = "meetup/history";
     
     /** Holds the methods that will be called when the response has arrived from the server. */
     public static abstract class Callback {
@@ -451,6 +452,17 @@ public class ServerRequest {
             JSONObject data = new JSONObject();
             data.put(Keys.USER_KEY, userKey);
             return new ServerRequest(DIR_MEETUP_LEAVE, data);
+
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Unable to create login ping request.");
+        }
+    }
+
+    public static ServerRequest createMeetupHistoryRequest(String userKey) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put(Keys.USER_KEY, userKey);
+            return new ServerRequest(DIR_MEETUP_HISTORY, data);
 
         } catch (JSONException e) {
             throw new IllegalArgumentException("Unable to create login ping request.");

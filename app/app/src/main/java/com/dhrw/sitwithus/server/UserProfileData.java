@@ -3,7 +3,6 @@ package com.dhrw.sitwithus.server;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import com.dhrw.sitwithus.R;
 import com.dhrw.sitwithus.util.Keys;
@@ -11,9 +10,7 @@ import com.dhrw.sitwithus.util.Keys;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
-
-public class UserProfileData implements Serializable {
+public class UserProfileData {
 
     public final String userKey;
     public final String username;

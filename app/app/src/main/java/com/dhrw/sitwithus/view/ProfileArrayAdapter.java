@@ -29,7 +29,7 @@ public abstract class ProfileArrayAdapter extends ArrayAdapter {
         // Retrieve a list of all the usernames for which the profile has not been cached
         ArrayList<String> newUsernames = new ArrayList<>();
         for (String username : usernames) {
-            if (!usernameProfiles.containsKey(username)) {
+            if (!usernameProfiles.containsKey(username) && !newUsernames.contains(username)) {
                 newUsernames.add(username);
             }
         }

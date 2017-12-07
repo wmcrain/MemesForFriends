@@ -23,4 +23,5 @@ public class Keys {
     public static final String MEETUP_KEY = "meetup_key";
     public static final String PENDING_MATCH = "pending_match";
     public static final String BLOCKED = "blocked";
+    public static final String HISTORY = "history";
 }

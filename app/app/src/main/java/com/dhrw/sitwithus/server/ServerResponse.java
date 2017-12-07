@@ -1,7 +1,5 @@
 package com.dhrw.sitwithus.server;
 
-import com.dhrw.sitwithus.util.Keys;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,6 +53,19 @@ public class ServerResponse {
             JSONArray a = response.getJSONArray(name);
             for (int i = 0; i < a.length(); i++) {
                 result.add(new UserProfileData(a.getJSONObject(i)));
+            }
+            return result;
+        } catch (JSONException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    public List<MeetupData> getMeetupArray(String name) {
+        ArrayList<MeetupData> result = new ArrayList<>();
+        try {
+            JSONArray a = response.getJSONArray(name);
+            for (int i = 0; i < a.length(); i++) {
+                result.add(new MeetupData(a.getJSONObject(i)));
             }
             return result;
         } catch (JSONException e) {

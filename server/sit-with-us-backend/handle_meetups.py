@@ -239,16 +239,17 @@ class ConfirmMeetupMatchHandler(ApiHandler):
 
 class MeetupHistoryHandler(ApiHandler):
     def handle(self):
-        user_key = self.getParam(Keys.USER_KEY)
-        user = ndb.Key(urlsafe=search_key).get()
+        user = ndb.Key(urlsafe=self.getParam(Keys.USER_KEY)).get()
 
         history = []
         for meetup_key in user.previous_meetups:
-            meetup = meetup_key.get()
-            history.append({
-                Keys.USERNAME : [x.get().username for x in meetup.previous_users],
-                Keys.TIME_FORMED : meetup.time_formed
-            })
+
+            if not meetup_key is None and not meetup_key.get() is None:
+                meetup = meetup_key.get()
+                history.append({
+                    Keys.USERNAME : [x.get().username for x in meetup.previous_users],
+                    Keys.TIME_FORMED : meetup.time_formed.strftime("%Y-%m-%d %H:%M:%S"),
+                })
 
         return { 
             Keys.SUCCESS : 1,

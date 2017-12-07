@@ -58,9 +58,10 @@ public class CircleCharacterView extends View {
 
         // Draw the background circle
         canvas.drawCircle(width / 2f, height / 2f,
-                Math.min(width, height) / 4f, circlePaint);
+                Math.min(width, height) / 2f, circlePaint);
 
         // Draw the character in the center of the circle
+        letterPaint.setTextSize(height);
         canvas.drawText(Character.toString(character), width / 2f,
                 height / 2f - ((letterPaint.descent() + letterPaint.ascent()) / 2f),
                 letterPaint);
