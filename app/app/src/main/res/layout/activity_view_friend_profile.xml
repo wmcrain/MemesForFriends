@@ -43,7 +43,7 @@
                 android:id="@+id/contactInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Contact Info"
+                android:text=""
                 android:textColor="@color/white"
 
                 android:paddingLeft="4dp"
