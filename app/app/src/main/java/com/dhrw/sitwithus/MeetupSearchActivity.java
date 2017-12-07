@@ -148,6 +148,14 @@ public class MeetupSearchActivity extends Activity {
         }
     }
 
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        View empty = findViewById(R.id.matchesEmpty);
+        ListView list = (ListView) findViewById(R.id.usersSearch);
+        list.setEmptyView(empty);
+    }
+
     /** */
     public static class MatchConfirmPopup extends DialogFragment {
 
@@ -348,21 +356,6 @@ public class MeetupSearchActivity extends Activity {
                 finish();
                 //stop the searching thread and take user out of screen when
                 //the thread has been stopped
-            }
-        });
-        Button matched = (Button) findViewById(R.id.matchedSearch);
-        matched.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(MeetupSearchActivity.this, MeetupSearchPendingActivity.class);
-                startActivityForResult(myIntent, 0);
-            }
-        });
-
-        Button unmatched = (Button) findViewById(R.id.unmatchedSearch);
-        unmatched.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
             }
         });
 
