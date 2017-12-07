@@ -1,6 +1,7 @@
 package com.dhrw.sitwithus;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.telephony.TelephonyManager;
 
 import com.dhrw.sitwithus.server.ServerRequest;
 import com.dhrw.sitwithus.server.ServerResponse;
@@ -22,6 +24,11 @@ public class UserCreateActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        TextView phonenumber = (TextView) findViewById(R.id.txt_phone_number);
+        TelephonyManager tMgr =(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        String mPhoneNumber = tMgr.getLine1Number();
+        phonenumber.setText(mPhoneNumber);
+
 
         // Send a create user request to the server and go back to the login activity
         Button button = (Button) findViewById(R.id.btn_sign_up);

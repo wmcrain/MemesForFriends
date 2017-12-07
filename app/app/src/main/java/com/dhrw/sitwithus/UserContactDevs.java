@@ -23,6 +23,8 @@ public class UserContactDevs extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_devs);
 
+
+        //TODO: Make this user feedback actually go somewhere
         Button submit = (Button) findViewById(R.id.submitDevs);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,7 +39,6 @@ public class UserContactDevs extends Activity {
     //this popup does not work.
 
     public void thankUser(){
-
         new AlertDialog.Builder(this, R.style.AlertDialogTheme)   //can't figure out how to make this text black
                 .setMessage("Thank you for your feedback and helping to improve our application!")
                 .setCancelable(false)
