@@ -125,9 +125,8 @@ public class EditProfileActivity extends Activity{
 
                 bio.setText(profile.bio);
 
-                if (profile.picture != null) {
-                    pic.setImageBitmap(profile.picture);
-                }
+                pic.setImageBitmap(profile.getPicture(EditProfileActivity.this));
+
             }
         });
     }
