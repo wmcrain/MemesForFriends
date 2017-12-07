@@ -1,40 +1,75 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/friend_entry_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1">
+    android:layout_height="wrap_content">
+    
+    <RelativeLayout
+        android:id="@+id/match_entry_picture_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/entry_picture_size"
+        android:layout_marginStart="@dimen/entry_spacing"
+        android:layout_marginEnd="@dimen/entry_spacing"
+        android:layout_marginTop="@dimen/entry_spacing"
+        android:layout_marginBottom="@dimen/entry_spacing"
+        android:gravity="center">
 
-    <ImageView
-        android:id="@+id/match_entry_picture"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_weight=".15"
-        android:gravity="center"/>
+        <ImageView
+            android:id="@+id/match_entry_picture"
+            android:layout_width="@dimen/entry_picture_size"
+            android:layout_height="@dimen/entry_picture_size"/>
 
-    <TextView
-        android:id="@+id/profileMatchEntry"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_weight=".55"
-        android:clickable="true"
-        android:ems="10"
-        android:focusable="false"
-        android:inputType="textPersonName" />
-
-    <TextView
-        android:id="@+id/distanceMatchEntry"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_weight=".15"
-        android:ems="10"
-        android:inputType="text" />
+        <ImageView
+            android:id="@+id/match_entry_picture_2"
+            android:layout_width="@dimen/entry_picture_size"
+            android:layout_height="@dimen/entry_picture_size"
+            android:layout_toEndOf="@id/match_entry_picture"
+            android:layout_marginLeft="@dimen/entry_spacing"
+            android:visibility="gone"/>
+        
+        <com.dhrw.sitwithus.view.CircleCharacterView
+            android:id="@+id/match_entry_more"
+            android:layout_height="@dimen/entry_picture_size"
+            android:layout_width="@dimen/entry_picture_size"
+            android:layout_toEndOf="@id/match_entry_picture_2"
+            android:layout_marginLeft="@dimen/entry_spacing"
+            android:visibility="gone"/>
+        
+    </RelativeLayout>
 
     <Switch
         android:id="@+id/toggleMatchEntry"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_weight=".15"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/entry_picture_size"
+        android:layout_marginEnd="@dimen/entry_spacing"
+        android:layout_marginTop="@dimen/entry_spacing"
+        android:layout_marginBottom="@dimen/entry_spacing"
+        android:layout_alignParentEnd="true"
+        android:gravity="end"
         android:text=""/>
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/profileMatchEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/entry_picture_size"
+        android:layout_marginEnd="@dimen/entry_spacing"
+        android:layout_marginTop="@dimen/entry_spacing"
+        android:layout_marginBottom="@dimen/entry_spacing"
+        android:layout_toEndOf="@id/match_entry_picture_layout"
+        android:layout_toStartOf="@id/toggleMatchEntry"
+        android:gravity="center_vertical"
+        android:textSize="22sp"/>
+
+    <TextView
+        android:id="@+id/distanceMatchEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/entry_spacing"
+        android:layout_marginTop="@dimen/entry_spacing"
+        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@+id/toggleMatchEntry"
+        android:layout_alignBottom="@+id/toggleMatchEntry"
+        android:textSize="12sp"/>
+
+</RelativeLayout>

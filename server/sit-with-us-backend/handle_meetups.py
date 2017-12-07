@@ -56,6 +56,11 @@ def leave_meetup(user_key):
             meetup.previous_users.append(user_key)
             meetup.put()
 
+        if len(meetup.current_users) == 0:
+            entities = SearchEntity.query(SearchEntity.meetup == meetup.key).fetch()
+            for entity in entities:
+                entity.key.delete()
+
         # Add the meetup to the user's meetup history if there was another user in it besides the 
         # current user
         if len(meetup.current_users) + len(meetup.previous_users) > 1:

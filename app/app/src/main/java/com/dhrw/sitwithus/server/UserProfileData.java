@@ -3,6 +3,7 @@ package com.dhrw.sitwithus.server;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.dhrw.sitwithus.R;
 import com.dhrw.sitwithus.util.Keys;
@@ -18,6 +19,7 @@ public class UserProfileData implements Serializable {
     public final String username;
     public final String firstName;
     public final String lastName;
+    public final String phoneNumber;
     public final String bio;
     public final Bitmap picture;
 
@@ -28,6 +30,7 @@ public class UserProfileData implements Serializable {
         username = object.getString(Keys.USERNAME);
         firstName = object.getString(Keys.FIRST_NAME);
         lastName = object.getString(Keys.LAST_NAME);
+        phoneNumber = object.getString(Keys.PHONE_NUMBER);
 
         // Retrieve the profile page assets of the user
         bio = object.getString(Keys.BIO);

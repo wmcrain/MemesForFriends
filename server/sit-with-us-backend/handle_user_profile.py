@@ -27,6 +27,7 @@ class GetProfileHandler(ApiHandler):
                 Keys.USERNAME : user.username,
                 Keys.FIRST_NAME : user.first_name,
                 Keys.LAST_NAME : user.last_name,
+                Keys.PHONE_NUMBER : user.phone,
                 Keys.BIO : user.bio,
             }
 

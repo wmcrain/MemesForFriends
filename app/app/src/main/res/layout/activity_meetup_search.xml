@@ -88,7 +88,8 @@
                 android:id="@+id/usersSearch"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical">
+                android:scrollbars="vertical"
+                android:background="@drawable/list_view_border">
             </ListView>
         </LinearLayout>
         <LinearLayout

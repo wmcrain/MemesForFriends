@@ -278,6 +278,7 @@ public class MeetupSearchActivity extends Activity {
                         if (user.picture != null) {
                             args.putString(Keys.PICTURE, EncodedBitmap.toString(user.picture));
                         }
+
                         //TODO: Figure out what icon to use here.
                         //TODO: Only push this if the application is in background-unsure if possible at this API level
                         NotificationManager notif = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
