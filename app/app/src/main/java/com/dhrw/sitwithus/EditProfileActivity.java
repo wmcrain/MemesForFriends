@@ -68,18 +68,21 @@ public class EditProfileActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_profile);
+        setContentView(R.layout.activity_view_friend_profile);
 
         //TO-DO - get the bio and pic from the server instead of hardcoding in the xml
 
         final FragmentManager fm = getFragmentManager();
         final BioPopup popup = new BioPopup();
         final Bundle args = new Bundle();
-        final TextView bio = (TextView) findViewById(R.id.viewProfileBio);
-        final Switch request = (Switch) findViewById(R.id.requestFriend);
-        final Button block = (Button) findViewById(R.id.blockUser);
-        request.setVisibility(View.GONE);
+        final Bundle contactargs = new Bundle();
+        final TextView bio = (TextView) findViewById(R.id.viewProfileBioFriends);
+        final TextView contactinfo = (TextView) findViewById(R.id.contactInfo);
+       // final Switch request = (Switch) findViewById(R.id.requestFriend);
+        final Button block = (Button) findViewById(R.id.blockUserFriends);
+        final Button remove = (Button) findViewById(R.id.removeFriendFriends);
         block.setVisibility(View.GONE);
+        remove.setVisibility(View.GONE);
 
         bio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +95,7 @@ public class EditProfileActivity extends Activity{
             }
         });
 
-        final ImageView pic = (ImageView) findViewById(R.id.viewProfilePic);
+        final ImageView pic = (ImageView) findViewById(R.id.viewProfilePicFriends);
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +111,7 @@ public class EditProfileActivity extends Activity{
                 Preferences.getUserKey(this),
                 Preferences.getUsername(this));
 
-        final TextView nameView = (TextView) findViewById(R.id.name_age);
+        final TextView nameView = (TextView) findViewById(R.id.name_ageFriends);
 
         getProfile.sendRequest(new ServerRequest.Callback() {
             @Override
@@ -129,7 +132,7 @@ public class EditProfileActivity extends Activity{
     }
 
     public void setBio(String newBio){
-        final TextView bio = (TextView) findViewById(R.id.viewProfileBio);
+        final TextView bio = (TextView) findViewById(R.id.viewProfileBioFriends);
         bio.setText(newBio);
 
         ServerRequest updateProfile = ServerRequest.createUpdateProfileRequest(
@@ -152,7 +155,7 @@ public class EditProfileActivity extends Activity{
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-            ImageView pic = (ImageView) findViewById(R.id.viewProfilePic);
+            ImageView pic = (ImageView) findViewById(R.id.viewProfilePicFriends);
             Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
             bitmap = Bitmap.createScaledBitmap(bitmap, pic.getWidth(), pic.getHeight(), true);
 
