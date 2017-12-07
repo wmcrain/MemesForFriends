@@ -8,5 +8,9 @@ body {
   background: -ms-linear-gradient(#00a060, #0060a0);
   background: linear-gradient(#00a060, #0060a0);
 
-  color: #bbbbbb;
+  color: #ffffff;
+}
+
+.card {
+  color: #000000;
 }
