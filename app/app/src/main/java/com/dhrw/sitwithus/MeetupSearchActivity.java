@@ -281,6 +281,7 @@ public class MeetupSearchActivity extends Activity {
 
                         //TODO: Figure out what icon to use here.
                         //TODO: Only push this if the application is in background-unsure if possible at this API level
+                        //TODO: Notification intent
                         NotificationManager notif = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
                         //https://developer.android.com/training/notify-user/build-notification.html
                         Notification notify=new Notification.Builder
