@@ -34,7 +34,7 @@ class GetProfileHandler(ApiHandler):
             if user.picture is not None:
                 properties.update({ Keys.PICTURE : user.picture })
 
-            if user.key in self_user.friends: 
+            if user.key in self_user.friends or user.key == self_user: 
                 properties.update({ Keys.PHONE_NUMBER : user.phone })
 
             profiles.append(properties)
