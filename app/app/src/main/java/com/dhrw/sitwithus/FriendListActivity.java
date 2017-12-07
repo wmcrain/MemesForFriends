@@ -69,7 +69,6 @@ public class FriendListActivity extends Activity {
                 }
             });
 
-            //View view = new View()
             return view;
         }
 

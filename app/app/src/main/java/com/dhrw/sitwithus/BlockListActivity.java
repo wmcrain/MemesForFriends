@@ -1,6 +1,9 @@
 package com.dhrw.sitwithus;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,7 +32,8 @@ public class BlockListActivity extends Activity {
     private List<BlockedUserData> blockedUsers = new ArrayList<>();
     private BlockArrayAdapter adapter;
 
-    private class BlockArrayAdapter extends ArrayAdapter {
+    private class BlockArrayAdapter extends ArrayAdapter
+    {
 
         BlockArrayAdapter() {
             super(BlockListActivity.this, R.layout.activity_block_list);
@@ -43,20 +47,14 @@ public class BlockListActivity extends Activity {
             // Set the name of the user in the block list
             TextView name = (TextView) view.findViewById(R.id.blockEntryName);
             name.setText(blockedUser.firstName + " " + blockedUser.lastName);
+            final TextView changetext = (TextView) findViewById(R.id.blockEmpty);
 
             // Set a click listener for the unblocking of a user
             Button delete = (Button) view.findViewById(R.id.blockEntryRemove);
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Remove the user that has just been unblocked
-                    blockedUsers.remove(position);
-                    adapter.notifyDataSetChanged();
-
-                    // Tell the server that the user has been unblocked
-                    ServerRequest.createUnblockRequest(
-                            Preferences.getUserKey(BlockListActivity.this),
-                            blockedUser.userKey).sendRequest();
+                    unblockConfirm(position, blockedUser, changetext);
                 }
             });
 
@@ -82,6 +80,7 @@ public class BlockListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_block_list);
+        final TextView changetext = (TextView) findViewById(R.id.blockEmpty);
 
         // Set the adapter for the block list
         adapter = new BlockArrayAdapter();
@@ -96,12 +95,35 @@ public class BlockListActivity extends Activity {
                         blockedUsers = responseMessage.getBlockedUserList(Keys.BLOCKED);
 
                         if (blockedUsers.size() == 0) {
-                            TextView changetext = (TextView) findViewById(R.id.blockEmpty);
                             changetext.setText("No blocked users :)");
                         }
                         adapter.notifyDataSetChanged();
                     }
                 }
         );
+    }
+
+    public void unblockConfirm(final int position, final BlockedUserData blockedUser, final TextView changetext){
+
+        new AlertDialog.Builder(this, R.style.AlertDialogTheme)
+                .setMessage("Are you sure you want to unblock this user?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //remove the user from the list of blocked users
+                        blockedUsers.remove(position);
+                        adapter.notifyDataSetChanged();
+
+                        // Tell the server that the user has been unblocked
+                        ServerRequest.createUnblockRequest(
+                                Preferences.getUserKey(BlockListActivity.this),
+                                blockedUser.userKey).sendRequest();
+                        if (blockedUsers.size() == 0) {
+                            changetext.setText("No blocked users :)");
+                        }
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 }
