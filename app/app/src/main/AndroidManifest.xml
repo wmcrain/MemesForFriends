@@ -55,6 +55,9 @@
         <activity android:name=".MeetupActivity">
         </activity>
 
+        <activity android:name =".ViewFriendProfileActivity">
+        </activity>
+
 
     </application>
 

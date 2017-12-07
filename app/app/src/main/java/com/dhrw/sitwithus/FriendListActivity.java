@@ -63,7 +63,7 @@ public class FriendListActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     Intent viewProfile = new Intent(FriendListActivity.this,
-                            ViewProfileActivity.class);
+                            ViewFriendProfileActivity.class);
                     viewProfile.putExtra(Keys.USERNAME, profile.username);
                     startActivity(viewProfile);
                 }

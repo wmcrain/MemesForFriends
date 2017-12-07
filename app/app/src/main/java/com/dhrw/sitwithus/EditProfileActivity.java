@@ -37,6 +37,7 @@ public class EditProfileActivity extends Activity{
             final View rootView=inflater.inflate(R.layout.fragment_edit_bio_popup, container, false);
 
             final String biography = getArguments().getString("biography");
+            final String contactinfo = getArguments().getString("phone");
 
             final EditText enterBio = (EditText) rootView.findViewById(R.id.bioPopupEditText);
             enterBio.setText(biography);
