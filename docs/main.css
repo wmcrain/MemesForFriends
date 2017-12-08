@@ -14,3 +14,34 @@ body {
 .card {
   color: #000000;
 }
+
+
+.BodyElement {
+    background-color : #313131;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px #101010;
+    color: #F1F1F1;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+h1 {
+    margin: 5px auto;
+    text-shadow: 0 2px 2px #101010;
+}
+
+h2 {
+    text-align: center;
+    margin: 5px auto;
+    text-shadow: 0 2px 2px #101010;
+}
+
+h3 {
+    margin: 5px auto;
+    text-shadow: 0 2px 2px #101010;
+}
+
+.BodyElement p {
+    margin: 5px 20px;
+    font-size: 100%;
+}
